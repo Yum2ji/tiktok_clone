@@ -32,8 +32,17 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   void _onNextTap() {
     //여기서는 context로 input 받지않음. stateful 위젯으로 하면 context 받음
     //context input으로정의해도 되긴함.
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const InterestsScreen()));
+
+// Navogator.of(context).push를 쓰면 로그인하고 다음 페이지 넘어가도 다시 뒤로로 가는 문제존재.
+// 따라서, pushAndRemoveUntil을 사용.
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const InterestsScreen()),
+            (route) {
+              //predicate, 여기는 previous route 쓸지 안쓸지를 정하는 부분임.
+              //return false 하면 항상, 모든 내용을 안쓰게 됨.
+          return false;
+        });
+  
   }
 
   void _setTextFieldDate(DateTime date) {

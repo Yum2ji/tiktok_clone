@@ -13,10 +13,9 @@ class LoginFormScreen extends StatefulWidget {
 
 class _LoginFormScreenState extends State<LoginFormScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  Map<String,String> formData ={};
+  Map<String, String> formData = {};
 
   void _onSubmitTap() {
-
     /*
     if (_formKey.currentState != null) {
       _formKey.currentState!.validate();
@@ -30,12 +29,18 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
     */
 
     if (_formKey.currentState != null) {
-      if(_formKey.currentState!.validate()){
+      if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
 
-          Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const InterestsScreen()));
-
+// Navogator.of(context).push를 쓰면 로그인하고 다음 페이지 넘어가도 다시 뒤로로 가는 문제존재.
+// 따라서, pushAndRemoveUntil을 사용.
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const InterestsScreen()),
+            (route) {
+              //predicate, 여기는 previous route 쓸지 안쓸지를 정하는 부분임.
+              //return false 하면 항상, 모든 내용을 안쓰게 됨.
+          return false;
+        });
       }
     }
   }
@@ -60,13 +65,11 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
                 validator: (value) {
                   return null;
                 },
-                 onSaved: (newValue) {
-                  
-                  if(newValue != null)
-                  {
+                onSaved: (newValue) {
+                  if (newValue != null) {
                     formData['password'] = newValue;
                   }
-                 },
+                },
               ),
               Gaps.v16,
               TextFormField(
@@ -74,13 +77,13 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
                 validator: (value) {
                   return null;
                 },
-                 onSaved: (newValue) {
+                onSaved: (newValue) {
                   //validator에서 null 이 안들어온경우.
-                  if(newValue != null)
-                  {
+                  if (newValue != null) {
                     formData['password'] = newValue;
                   }
-                 },              ),
+                },
+              ),
               Gaps.v28,
               GestureDetector(
                   onTap: _onSubmitTap,
