@@ -26,12 +26,15 @@ class _MainNavigationBottomNaviScreenScreenState extends State<MainNavigationBot
     });
   }
 
+  // MainNavigationBottomNaviScreen
+  // 여기서는 MainNavigationBottom 쓰는
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: screens[_selectedIndex],
       
-      //https://m3.material.io/ 로 구현하는 방식은 다른 class에서
+
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.shifting,
         onTap: _onTap,

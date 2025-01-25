@@ -17,6 +17,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
 
   @override
   void initState() {
+
     super.initState();
     _usernameConroller.addListener(() {
       setState(() {
@@ -24,6 +25,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
       });
     });
   }
+  
 
   @override
   void dispose() {

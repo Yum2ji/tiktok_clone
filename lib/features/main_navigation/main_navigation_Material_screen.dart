@@ -26,12 +26,15 @@ class _MainNavigationMaterialScreenState extends State<MainNavigationMaterialScr
     });
   }
 
+  //MainNavigationMaterialScreen
+  //https://m3.material.io/ 에있는 부분과 비슷하면서도 다른.
+  //https://m3.material.io/ 는 NavigationBar를 쓰고 설명에 Material 3라고 되어있음.
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: screens[_selectedIndex],
-      //https://m3.material.io/ 에있는 부분과 비슷하면서도 다른.
-      //https://m3.material.io/ 는 NavigationBar를 쓰고 설명에 Material 3라고 되어있음.
+
       bottomNavigationBar: NavigationBar(
         labelBehavior : NavigationDestinationLabelBehavior.onlyShowSelected,
          
