@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiktok_clone/features/videos/widgets/video_post.dart';
 
 class VideoTimelineScreen extends StatefulWidget {
   const VideoTimelineScreen({super.key});
@@ -15,38 +16,38 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
 
   final PageController _pageController = PageController();
 
-  List<Color> colors = [
-    Colors.blue,
-    Colors.red,
-    Colors.yellow,
-    Colors.teal,
-  ];
+  final _scrollDuration = const Duration(milliseconds: 250);
+  final _scrollCurve = Curves.linear;
 
   void _onPageChanged(int page) {
     //_pageController.animateToPage
-      //사용자가 원하는 화면 page로 갔을 때
-      // anaimation =>  curve에 설정하는 값이 animation 으로
-      // duration 시간동안만 animation 유지하기 
+    //사용자가 원하는 화면 page로 갔을 때
+    // anaimation =>  curve에 설정하는 값이 animation 으로
+    // duration 시간동안만 animation 유지하기
 
-      _pageController.animateToPage(
-        page,
-        duration: const Duration(milliseconds: 150),
-        curve: Curves.linear,
-      );
-
+    _pageController.animateToPage(
+      page,
+      duration: _scrollDuration,
+      curve: _scrollCurve,
+    );
 
     if (page == _itemCount - 1) {
       _itemCount = _itemCount + 4;
-      colors.addAll(
-        [
-          Colors.blue,
-          Colors.red,
-          Colors.yellow,
-          Colors.teal,
-        ],
-      );
       setState(() {});
     }
+  }
+
+  void _onVideoFinished() {
+    _pageController.nextPage(
+      duration: _scrollDuration,
+      curve: _scrollCurve,
+    );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -69,16 +70,9 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
       scrollDirection: Axis.vertical,
       //itemCount 설정안하면 사용자가 드래그 하다가 없는 값에 접근하면서 exception 발생
       itemCount: _itemCount,
-      itemBuilder: (context, index) => Container(
-        color: colors[index],
-        child: Center(
-          child: Text(
-            "Screen $index",
-            style: const TextStyle(
-              fontSize: 68,
-            ),
-          ),
-        ),
+      itemBuilder: (context, index) => VideoPost(
+        onVideoFinshied: _onVideoFinished,
+        index: index,
       ),
     );
   }
