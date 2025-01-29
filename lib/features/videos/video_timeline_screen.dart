@@ -38,6 +38,8 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
   }
 
   void _onVideoFinished() {
+    //그다음 영상으로 안넘어가게 return 추가. 자동으로 넘어가게하려면 return 부분만삭제
+    return;
     _pageController.nextPage(
       duration: _scrollDuration,
       curve: _scrollCurve,
@@ -48,6 +50,12 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  Future<void> _onRefresh() {
+    return Future.delayed(const Duration(
+      seconds: 1,
+    ));
   }
 
   @override
@@ -63,16 +71,25 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
     //갑자기 첫번째 화면으로 가고 싶을수도 있고 하니까
     // PageView.builder에서 페이지 올리다보면 애니메이션이 입혀진.. 이것도 contorller 가능능
 
-    return PageView.builder(
-      onPageChanged: _onPageChanged,
-      controller: _pageController,
-      //pageSnapping : false : user가 화면 반이상 드래그 햇는데도 다른 화면으로 안바뀌고 그대로
-      scrollDirection: Axis.vertical,
-      //itemCount 설정안하면 사용자가 드래그 하다가 없는 값에 접근하면서 exception 발생
-      itemCount: _itemCount,
-      itemBuilder: (context, index) => VideoPost(
-        onVideoFinshied: _onVideoFinished,
-        index: index,
+    //RefreshIndicator는 사용자가 refresh할때의 동작
+    return RefreshIndicator(
+      displacement: 50,
+      edgeOffset: 30 ,
+      //backgroundColor: Colors.red,
+      color: Theme.of(context).primaryColor,
+      strokeWidth: 3,
+      onRefresh: _onRefresh,
+      child: PageView.builder(
+        onPageChanged: _onPageChanged,
+        controller: _pageController,
+        //pageSnapping : false : user가 화면 반이상 드래그 햇는데도 다른 화면으로 안바뀌고 그대로
+        scrollDirection: Axis.vertical,
+        //itemCount 설정안하면 사용자가 드래그 하다가 없는 값에 접근하면서 exception 발생
+        itemCount: _itemCount,
+        itemBuilder: (context, index) => VideoPost(
+          onVideoFinshied: _onVideoFinished,
+          index: index,
+        ),
       ),
     );
   }
