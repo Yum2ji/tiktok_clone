@@ -139,6 +139,7 @@ class _VideoPostState extends State<VideoPost>
       //barrierColor: Colors.red,
       backgroundColor: Colors.transparent,
       context: context,
+      isScrollControlled : true,
       //이렇게해서 bottomsheet 연것은 navigator 로 새로운 위젯열듯이 열린것
       //VideoComments에서 뒤로가기 버튼이 동작하는 이유
       builder: (context) =>const VideoComments(),
