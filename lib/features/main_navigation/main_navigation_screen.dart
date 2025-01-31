@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/discover/discover_screen.dart';
+import 'package:tiktok_clone/features/inbox/inbox_screen.dart';
 import 'package:tiktok_clone/features/main_navigation/widgets/nav_tab.dart';
 import 'package:tiktok_clone/features/main_navigation/widgets/post_video_button.dart';
 import 'package:tiktok_clone/features/videos/video_timeline_screen.dart';
@@ -49,7 +51,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   //   ),
   // ];
 
-  int _selectedIndex = 0;
+  int _selectedIndex = 3;
 
   void _onTap(int index) {
     setState(() {
@@ -61,13 +63,14 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => Scaffold(
-        
           appBar: AppBar(
-            title : const Text("Record Vedio",),
-            centerTitle: true,
+            title: const Text(
+              "Record Vedio",
             ),
+            centerTitle: true,
+          ),
         ),
-        fullscreenDialog :true, //covering whole page
+        fullscreenDialog: true, //covering whole page
       ),
     );
   }
@@ -91,31 +94,31 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     return Scaffold(
       //resizeToAvoidBottomInset : bottomNaviagation 같은 것에 의해 생겨서, 키보드가 생기면 화면 resizing이 됨. 해당 현상을 막으려함.
       resizeToAvoidBottomInset: false,
-      backgroundColor: _selectedIndex==0? Colors.black: Colors.white,
+      backgroundColor: _selectedIndex == 0 ? Colors.black : Colors.white,
       body: Stack(
         children: [
           //build 되지만 visually hide.
           //Offstage widget이 너무많으면,, consume a lot of resource -> slow
           Offstage(
             offstage: _selectedIndex != 0,
-            child:  const VideoTimelineScreen(),
+            child: const VideoTimelineScreen(),
           ),
           Offstage(
             offstage: _selectedIndex != 1,
-            child:  Container(),
+            child: const DiscoverScreen(),
           ),
           Offstage(
             offstage: _selectedIndex != 3,
-            child:  Container(),
+            child: const InboxScreen(),
           ),
           Offstage(
             offstage: _selectedIndex != 4,
-            child:  Container(),
+            child: Container(),
           ),
         ],
       ), // screens.elementAt(_selectedIndex),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.black,
+        color: _selectedIndex == 0 ? Colors.black : Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(Sizes.size2),
           child: Row(
@@ -128,6 +131,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 seledtedIcon: FontAwesomeIcons.house,
                 icon: FontAwesomeIcons.house,
                 onTap: () => _onTap(0),
+                selectedIndex: _selectedIndex,
               ),
               NavTab(
                 text: "Discover",
@@ -135,11 +139,14 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 icon: FontAwesomeIcons.compass,
                 seledtedIcon: FontAwesomeIcons.solidCompass,
                 onTap: () => _onTap(1),
+                selectedIndex: _selectedIndex,
               ),
               Gaps.h24,
               GestureDetector(
                 onTap: _onPostVideoButtonTap,
-                child: const PostVideoButton(),
+                child: PostVideoButton(
+                  inverted: _selectedIndex != 0,
+                ),
               ),
               Gaps.h24,
               NavTab(
@@ -148,6 +155,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 icon: FontAwesomeIcons.message,
                 seledtedIcon: FontAwesomeIcons.solidMessage,
                 onTap: () => _onTap(3),
+                selectedIndex: _selectedIndex,
               ),
               NavTab(
                 text: "Profile",
@@ -155,6 +163,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 icon: FontAwesomeIcons.user,
                 seledtedIcon: FontAwesomeIcons.solidUser,
                 onTap: () => _onTap(4),
+                selectedIndex: _selectedIndex,
               ),
             ],
           ),

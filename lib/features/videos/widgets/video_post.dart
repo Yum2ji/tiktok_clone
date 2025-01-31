@@ -107,6 +107,14 @@ class _VideoPostState extends State<VideoPost>
         !_videoPlayerController.value.isPlaying) {
       _videoPlayerController.play();
     }
+
+    //main_navigation에서 offstage으로 되면 이론적으로 안보일 뿐 alive 는 되어있는거야. 
+    ////dispose가 안됨.
+    //// 다른 화면 갔다오도록 해놓았는데.
+    //다른 화면 갔다올 때 멈추도록 설정
+    if (_videoPlayerController.value.isPlaying && info.visibleFraction == 0) {
+      _togglePause();
+    }
   }
 
   void _togglePause() {
@@ -131,7 +139,7 @@ class _VideoPostState extends State<VideoPost>
   }
 
   void _onCommentsTap(BuildContext context) async {
-    if(_videoPlayerController.value.isPlaying){
+    if (_videoPlayerController.value.isPlaying) {
       _togglePause();
     }
     //await 은 여기서는 user가 bottomsheet 해제할때임.
@@ -139,10 +147,10 @@ class _VideoPostState extends State<VideoPost>
       //barrierColor: Colors.red,
       backgroundColor: Colors.transparent,
       context: context,
-      isScrollControlled : true,
+      isScrollControlled: true,
       //이렇게해서 bottomsheet 연것은 navigator 로 새로운 위젯열듯이 열린것
       //VideoComments에서 뒤로가기 버튼이 동작하는 이유
-      builder: (context) =>const VideoComments(),
+      builder: (context) => const VideoComments(),
     );
     _togglePause();
   }

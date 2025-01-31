@@ -73,6 +73,7 @@ class _VideoCommentsState extends State<VideoComments> {
               Scrollbar(
                 controller:_scrollController ,
                 child: ListView.separated(
+                  //ListView.separted의 controller도 sccrollbar와 동일 controller를 사용한다함.-댓글에서 봄
                   controller: _scrollController,
                   padding: const EdgeInsets.only(
                     top: Sizes.size10,
