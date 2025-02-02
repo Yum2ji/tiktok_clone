@@ -127,6 +127,7 @@ addListener, animationbuilder 나 setstate 없이 property _animationcontroller,
         title: GestureDetector(
           onTap: _toggleAnimations,
           child: Row(
+            mainAxisSize: MainAxisSize.min,//중간에 오게하려고
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(

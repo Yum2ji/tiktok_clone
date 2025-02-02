@@ -2,11 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/inbox/activity_screen.dart';
+import 'package:tiktok_clone/features/inbox/chat_screen.dart';
 
 class InboxScreen extends StatelessWidget {
   const InboxScreen({super.key});
 
-  void _onDmPressed() {}
+  void _onDmPressed(BuildContext context) {
+        Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const ChatScreen(),
+      ),
+    );
+  }
 
   void _onActivityTap(BuildContext context) {
     Navigator.of(context).push(
@@ -26,7 +33,10 @@ class InboxScreen extends StatelessWidget {
         title: const Text("Inbox"),
         actions: [
           IconButton(
-            onPressed: _onDmPressed,
+            onPressed: ()=>_onDmPressed(context),
+             // ()=> 이렇게 하는 이유. inbox_screen은 stateless widget에서는 메소드가 context build 에서만 가짐.
+             //// 따라서 ()=> 이렇게 메소드에 보내줌
+            // 일반적으로는 inbox 자체를 stateful로 하는 방법도있지만, stateless로 하는게 const도 쓸수있고 좋음
             icon: const FaIcon(
               FontAwesomeIcons.paperPlane,
             ),
