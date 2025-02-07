@@ -101,6 +101,12 @@ class _VideoPostState extends State<VideoPost>
   // ios에서는 그렇기 때문에, 둘다 동시에 동영상 재생되는 것을 막으려는 옵션이라고 보면됨.
   // 리소스 줄일 때 필요함.
   void _onVisibilityChanged(VisibilityInfo info) {
+
+    //이전 영상을 stop하고 내려갔다가 다시올라가면 exception발생.
+    //이전 내용 _videoPlayerController가 dispose되었다면면 "!_videoPlayerController.value.isPlaying" 이 조건에서 error남. 없는값을 부르니까까
+    //mounted 는 widgettree에서 삭제되었는지아닌지를 말함.
+    if(!mounted) return;
+
     if (info.visibleFraction == 1 &&
         !_isPaused //_isPaused 조건을 추가함 android는 괜찮은데. 강의ㅣ에서 영상 멈춘상태로-> refresh 하면 바로 restart되는 현상있어서 추가
         &&
