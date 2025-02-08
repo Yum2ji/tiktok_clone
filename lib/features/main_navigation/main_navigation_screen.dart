@@ -52,6 +52,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   //   ),
   // ];
 
+  /*
+   flutter 프로젝트 자체적으로 처음시작되는 페이지가 video이면서
+   video 에 음성이 포함되고 있으면 무조건 에러 남.
+   chrome, edge 같은데서 소리나는 비디오파일이 첫화면으로 자동재생되는 것을 막음.
+  */
   int _selectedIndex = 4;
 
   void _onTap(int index) {

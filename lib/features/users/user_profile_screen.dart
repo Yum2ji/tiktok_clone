@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiktok_clone/constants/breakpoint.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/settings/settings_screen.dart';
@@ -26,6 +27,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: DefaultTabController(
         length: 2,
@@ -50,165 +52,400 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
               SliverToBoxAdapter(
                 //SliverToBoxAdpater 안에는 자식노드의 자식노드의 자식노드에도 sliver는 사용못함
-                child: Column(
-                  children: [
-                    const CircleAvatar(
-                      radius: 50,
-                      foregroundImage: NetworkImage(
-                        "https://i.ytimg.com/vi/LYKTtPFB9b4/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBHxhTHbXz0HzU6pp4GLK-98XPQnw",
-                      ),
-                      child: Text(
-                          "Yumi"), //refresh 하면 짧은순간에 이름이 보이는 이런 효과추구하려면 text도 적는게좋을듯
-                    ),
-                    Gaps.v20,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "@YumiYumi",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: Sizes.size18,
-                          ),
+                child: width > Breakpoints.md
+                    ? SizedBox(
+                        width: Breakpoints.sm * 0.2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Gaps.v20,
+                                Column(
+                                  children: [
+                                    const CircleAvatar(
+                                      radius: 50,
+                                      foregroundImage: NetworkImage(
+                                        "https://i.ytimg.com/vi/LYKTtPFB9b4/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBHxhTHbXz0HzU6pp4GLK-98XPQnw",
+                                      ),
+                                      child: Text(
+                                          "Yumi"), //refresh 하면 짧은순간에 이름이 보이는 이런 효과추구하려면 text도 적는게좋을듯
+                                    ),
+                                    Gaps.v20,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Text(
+                                          "@YumiYumi",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: Sizes.size18,
+                                          ),
+                                        ),
+                                        Gaps.h5,
+                                        FaIcon(
+                                          FontAwesomeIcons.solidCircleCheck,
+                                          size: Sizes.size16,
+                                          color: Colors.blue.shade500,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Gaps.h24,
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: Sizes.size52,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const MatchData(
+                                            val: "97",
+                                            info: "Following",
+                                          ),
+                                          VerticalDivider(
+                                            //specific hegiht을 가진 부모위젯필요
+                                            width: Sizes
+                                                .size32, // A|B 가 있을때 A와 B사이의 거리를 의미함
+                                            thickness: Sizes.size1,
+                                            color: Colors.grey.shade400,
+                                            indent: Sizes.size14,
+                                            endIndent: Sizes.size14,
+                                          ),
+                                          const MatchData(
+                                            val: "10 M",
+                                            info: "Followers",
+                                          ),
+                                          VerticalDivider(
+                                            //specific hegiht을 가진 부모위젯필요
+                                            width: Sizes
+                                                .size32, // A|B 가 있을때 A와 B사이의 거리를 의미함
+                                            thickness: Sizes.size1,
+                                            color: Colors.grey.shade400,
+                                            indent: Sizes.size14,
+                                            endIndent: Sizes.size14,
+                                          ),
+                                          const MatchData(
+                                            val: "194.3M",
+                                            info: "Likes",
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Gaps.v14,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          //FractionallySizedBox
+                                          //width, heigth 은 부모노드 기준
+                                          // widthFactor: 0.33,
+                                          width: width > Breakpoints.sm
+                                              ? MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.16
+                                              : MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.3,
+                                          height: width > Breakpoints.sm
+                                              ? Breakpoints.sm * 0.07
+                                              : width * 0.03,
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: Sizes.size12,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                Radius.circular(Sizes.size4),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              "Follow",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                        Gaps.h10,
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                width: 1,
+                                                color: Colors.grey.shade300),
+                                          ),
+                                          width: width > Breakpoints.sm
+                                              ? Breakpoints.sm * 0.07
+                                              : width * 0.03,
+                                          height: width > Breakpoints.sm
+                                              ? Breakpoints.sm * 0.07
+                                              : width * 0.03,
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: Sizes.size10,
+                                            horizontal: Sizes.size8,
+                                          ),
+                                          child: const Center(
+                                            child: FaIcon(
+                                              FontAwesomeIcons.youtube,
+                                              size: Sizes.size24,
+                                            ),
+                                          ),
+                                        ),
+                                        Gaps.h10,
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                width: 1,
+                                                color: Colors.grey.shade300),
+                                          ),
+                                          width: width > Breakpoints.sm
+                                              ? Breakpoints.sm * 0.07
+                                              : width * 0.03,
+                                          height: width > Breakpoints.sm
+                                              ? Breakpoints.sm * 0.07
+                                              : width * 0.03,
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: Sizes.size6,
+                                            horizontal: Sizes.size6,
+                                          ),
+                                          child: const Icon(
+                                            Icons.arrow_drop_down_outlined,
+                                            size: Sizes.size32,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const Center(
+                              child: SizedBox(
+                                width: Breakpoints.sm * 0.75,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Gaps.v14,
+                                    Text(
+                                      "All highlights and where to watch live matches on FIFA+. I wonder wonder",
+                                      textAlign: TextAlign.start,
+                                    ),
+                                    Gaps.v8,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        FaIcon(
+                                          FontAwesomeIcons.link,
+                                          size: Sizes.size12,
+                                        ),
+                                        Gaps.h4,
+                                        Text(
+                                          "https://nomadcoder.co",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
+                                    ),
+                                    Gaps.v20,
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        Gaps.h5,
-                        FaIcon(
-                          FontAwesomeIcons.solidCircleCheck,
-                          size: Sizes.size16,
-                          color: Colors.blue.shade500,
-                        ),
-                      ],
-                    ),
-                    Gaps.v24,
-                    SizedBox(
-                      height: Sizes.size52,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      )
+                    : Column(
                         children: [
-                          const MatchData(
-                            val: "97",
-                            info: "Following",
-                          ),
-                          VerticalDivider(
-                            //specific hegiht을 가진 부모위젯필요
-                            width: Sizes.size32, // A|B 가 있을때 A와 B사이의 거리를 의미함
-                            thickness: Sizes.size1,
-                            color: Colors.grey.shade400,
-                            indent: Sizes.size14,
-                            endIndent: Sizes.size14,
-                          ),
-                          const MatchData(
-                            val: "10 M",
-                            info: "Followers",
-                          ),
-                          VerticalDivider(
-                            //specific hegiht을 가진 부모위젯필요
-                            width: Sizes.size32, // A|B 가 있을때 A와 B사이의 거리를 의미함
-                            thickness: Sizes.size1,
-                            color: Colors.grey.shade400,
-                            indent: Sizes.size14,
-                            endIndent: Sizes.size14,
-                          ),
-                          const MatchData(
-                            val: "194.3M",
-                            info: "Likes",
-                          ),
-                        ],
-                      ),
-                    ),
-                    Gaps.v14,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          //FractionallySizedBox
-                          //width, heigth 은 부모노드 기준
-                          // widthFactor: 0.33,
-                          width: MediaQuery.of(context).size.width * 0.33,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: Sizes.size12,
+                          const CircleAvatar(
+                            radius: 50,
+                            foregroundImage: NetworkImage(
+                              "https://i.ytimg.com/vi/LYKTtPFB9b4/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBHxhTHbXz0HzU6pp4GLK-98XPQnw",
                             ),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(Sizes.size4),
+                            child: Text(
+                                "Yumi"), //refresh 하면 짧은순간에 이름이 보이는 이런 효과추구하려면 text도 적는게좋을듯
+                          ),
+                          Gaps.v20,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "@YumiYumi",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: Sizes.size18,
+                                ),
                               ),
+                              Gaps.h5,
+                              FaIcon(
+                                FontAwesomeIcons.solidCircleCheck,
+                                size: Sizes.size16,
+                                color: Colors.blue.shade500,
+                              ),
+                            ],
+                          ),
+                          Gaps.v24,
+                          SizedBox(
+                            height: Sizes.size52,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const MatchData(
+                                  val: "97",
+                                  info: "Following",
+                                ),
+                                VerticalDivider(
+                                  //specific hegiht을 가진 부모위젯필요
+                                  width:
+                                      Sizes.size32, // A|B 가 있을때 A와 B사이의 거리를 의미함
+                                  thickness: Sizes.size1,
+                                  color: Colors.grey.shade400,
+                                  indent: Sizes.size14,
+                                  endIndent: Sizes.size14,
+                                ),
+                                const MatchData(
+                                  val: "10 M",
+                                  info: "Followers",
+                                ),
+                                VerticalDivider(
+                                  //specific hegiht을 가진 부모위젯필요
+                                  width:
+                                      Sizes.size32, // A|B 가 있을때 A와 B사이의 거리를 의미함
+                                  thickness: Sizes.size1,
+                                  color: Colors.grey.shade400,
+                                  indent: Sizes.size14,
+                                  endIndent: Sizes.size14,
+                                ),
+                                const MatchData(
+                                  val: "194.3M",
+                                  info: "Likes",
+                                ),
+                              ],
                             ),
-                            child: const Text(
-                              "Follow",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
+                          ),
+                          Gaps.v14,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                //FractionallySizedBox
+                                //width, heigth 은 부모노드 기준
+                                // widthFactor: 0.33,
+                                width: width > Breakpoints.sm
+                                    ? MediaQuery.of(context).size.width * 0.16
+                                    : MediaQuery.of(context).size.width * 0.3,
+                                height: width > Breakpoints.sm
+                                    ? Breakpoints.sm * 0.07
+                                    : width * 0.09,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: Sizes.size12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColor,
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(Sizes.size4),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    "Follow",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
                               ),
+                              Gaps.h10,
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 1, color: Colors.grey.shade300),
+                                ),
+                                width: width > Breakpoints.sm
+                                    ? Breakpoints.sm * 0.07
+                                    : width * 0.08,
+                                height: width > Breakpoints.sm
+                                    ? Breakpoints.sm * 0.07
+                                    : width * 0.1,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: Sizes.size10,
+                                  horizontal: Sizes.size8,
+                                ),
+                                child: const Center(
+                                  child: FaIcon(
+                                    FontAwesomeIcons.youtube,
+                                    size: Sizes.size24,
+                                  ),
+                                ),
+                              ),
+                              Gaps.h10,
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 1, color: Colors.grey.shade300),
+                                ),
+                                width: width > Breakpoints.sm
+                                    ? Breakpoints.sm * 0.07
+                                    : width * 0.1,
+                                height: width > Breakpoints.sm
+                                    ? Breakpoints.sm * 0.07
+                                    : width * 0.1,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: Sizes.size6,
+                                  horizontal: Sizes.size6,
+                                ),
+                                child: const Icon(
+                                  Icons.arrow_drop_down_outlined,
+                                  size: Sizes.size32,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Gaps.v14,
+                          const Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Sizes.size32,
+                            ),
+                            child: Text(
+                              "All highlights and where to watch live matches on FIFA+. I wonder wonder",
                               textAlign: TextAlign.center,
                             ),
                           ),
-                        ),
-                        Gaps.h10,
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 1, color: Colors.grey.shade300),
+                          Gaps.v14,
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              FaIcon(
+                                FontAwesomeIcons.link,
+                                size: Sizes.size12,
+                              ),
+                              Gaps.h4,
+                              Text(
+                                "https://nomadcoder.co",
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ],
                           ),
-                          width: MediaQuery.of(context).size.width * 0.1,
-                          height: MediaQuery.of(context).size.width * 0.1,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: Sizes.size10,
-                            horizontal: Sizes.size8,
-                          ),
-                          child: const FaIcon(
-                            FontAwesomeIcons.youtube,
-                            size: Sizes.size24,
-                          ),
-                        ),
-                        Gaps.h10,
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 1, color: Colors.grey.shade300),
-                          ),
-                          width: MediaQuery.of(context).size.width * 0.1,
-                          height: MediaQuery.of(context).size.width * 0.1,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: Sizes.size6,
-                            horizontal: Sizes.size6,
-                          ),
-                          child: const Icon(
-                            Icons.arrow_drop_down_outlined,
-                            size: Sizes.size32,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Gaps.v14,
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Sizes.size32,
+                          Gaps.v20,
+                        ],
                       ),
-                      child: Text(
-                        "All highlights and where to watch live matches on FIFA+. I wonder wonder",
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Gaps.v14,
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FaIcon(
-                          FontAwesomeIcons.link,
-                          size: Sizes.size12,
-                        ),
-                        Gaps.h4,
-                        Text(
-                          "https://nomadcoder.co",
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    Gaps.v20,
-                  ],
-                ),
               ),
               SliverPersistentHeader(
                 delegate: PersistentTabbar(),
@@ -228,10 +465,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
-                itemCount: 20,
+                itemCount: 100,
                 padding: EdgeInsets.zero,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, //# of columns
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: width > Breakpoints.lg ? 5 : 3, //# of columns
                   crossAxisSpacing: Sizes.size2,
                   mainAxisSpacing: Sizes.size2,
 

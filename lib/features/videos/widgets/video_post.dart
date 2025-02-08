@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
@@ -32,6 +33,14 @@ class _VideoPostState extends State<VideoPost>
   late final AnimationController _animationController;
 
   bool _isSeeMore = false;
+  double _currentVolume = 0.0;
+
+  void _setVolume(double volume) async {
+    await _videoPlayerController.setVolume(volume);
+    setState(() {
+      _currentVolume = volume;
+    });
+  }
 
   void _onVideoChanged() {
     if (_videoPlayerController.value.isInitialized) {
@@ -49,6 +58,10 @@ class _VideoPostState extends State<VideoPost>
     //동영상 끝나면 반복재생하도록함.
     //video_timeline_screen에서도 비디오 끝나면 return하도록 해놓아서 같이쓰는기능
     await _videoPlayerController.setLooping(true);
+
+    if (kIsWeb) {
+      _setVolume(0);
+    }
 
     _videoPlayerController.addListener(_onVideoChanged);
     setState(() {});
@@ -101,11 +114,10 @@ class _VideoPostState extends State<VideoPost>
   // ios에서는 그렇기 때문에, 둘다 동시에 동영상 재생되는 것을 막으려는 옵션이라고 보면됨.
   // 리소스 줄일 때 필요함.
   void _onVisibilityChanged(VisibilityInfo info) {
-
     //이전 영상을 stop하고 내려갔다가 다시올라가면 exception발생.
     //이전 내용 _videoPlayerController가 dispose되었다면면 "!_videoPlayerController.value.isPlaying" 이 조건에서 error남. 없는값을 부르니까까
     //mounted 는 widgettree에서 삭제되었는지아닌지를 말함.
-    if(!mounted) return;
+    if (!mounted) return;
 
     if (info.visibleFraction == 1 &&
         !_isPaused //_isPaused 조건을 추가함 android는 괜찮은데. 강의ㅣ에서 영상 멈춘상태로-> refresh 하면 바로 restart되는 현상있어서 추가
@@ -114,7 +126,7 @@ class _VideoPostState extends State<VideoPost>
       _videoPlayerController.play();
     }
 
-    //main_navigation에서 offstage으로 되면 이론적으로 안보일 뿐 alive 는 되어있는거야. 
+    //main_navigation에서 offstage으로 되면 이론적으로 안보일 뿐 alive 는 되어있는거야.
     ////dispose가 안됨.
     //// 다른 화면 갔다오도록 해놓았는데.
     //다른 화면 갔다올 때 멈추도록 설정
@@ -259,6 +271,19 @@ class _VideoPostState extends State<VideoPost>
             right: 10,
             child: Column(
               children: [
+                GestureDetector(
+                  onTap: () {
+                    _currentVolume == 0 ? _setVolume(20) : _setVolume(0);
+                  },
+                  child: FaIcon(
+                    _currentVolume == 0
+                        ? FontAwesomeIcons.volumeXmark
+                        : FontAwesomeIcons.volumeHigh,
+                    color: Colors.white,
+                    size: Sizes.size40,
+                  ),
+                ),
+                Gaps.v24,
                 const CircleAvatar(
                   radius: 25,
                   backgroundColor: Colors.black,
