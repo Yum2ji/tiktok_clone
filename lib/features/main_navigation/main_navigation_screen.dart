@@ -8,6 +8,7 @@ import 'package:tiktok_clone/features/main_navigation/widgets/nav_tab.dart';
 import 'package:tiktok_clone/features/main_navigation/widgets/post_video_button.dart';
 import 'package:tiktok_clone/features/users/user_profile_screen.dart';
 import 'package:tiktok_clone/features/videos/video_timeline_screen.dart';
+import 'package:tiktok_clone/utils.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -57,7 +58,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
    video 에 음성이 포함되고 있으면 무조건 에러 남.
    chrome, edge 같은데서 소리나는 비디오파일이 첫화면으로 자동재생되는 것을 막음.
   */
-  int _selectedIndex = 4;
+  int _selectedIndex = 0;
 
   void _onTap(int index) {
     setState(() {
@@ -97,10 +98,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = isDarkMode(context);
     return Scaffold(
       //resizeToAvoidBottomInset : bottomNaviagation 같은 것에 의해 생겨서, 키보드가 생기면 화면 resizing이 됨. 해당 현상을 막으려함.
       resizeToAvoidBottomInset: false,
-      backgroundColor: _selectedIndex == 0 ? Colors.black : Colors.white,
+      backgroundColor: _selectedIndex == 0 ||isDark? Colors.black : Colors.white,
       body: Stack(
         children: [
           //build 되지만 visually hide.
@@ -123,10 +125,14 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
         ],
       ), // screens.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomAppBar(
-        color: _selectedIndex == 0 ? Colors.black : Colors.white,
+      bottomNavigationBar: Container(
+        color: _selectedIndex == 0 || isDark? Colors.black : Colors.white,
         child: Padding(
-          padding: const EdgeInsets.all(Sizes.size2),
+          padding: const EdgeInsets.only(
+            bottom: Sizes.size32,
+            top: Sizes.size16,
+
+          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,7 +157,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               GestureDetector(
                 onTap: _onPostVideoButtonTap,
                 child: PostVideoButton(
-                  inverted: _selectedIndex != 0,
+                  inverted: _selectedIndex == 0,
                 ),
               ),
               Gaps.h24,

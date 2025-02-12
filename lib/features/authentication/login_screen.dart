@@ -4,12 +4,14 @@ import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/authentication/login_form_screen.dart';
 import 'package:tiktok_clone/features/authentication/widgets/auth_button.dart';
+import 'package:tiktok_clone/utils.dart';
 
 class LoginScreen extends StatelessWidget {
+  static String routeName = "/login";
   const LoginScreen({super.key});
 
   void _onSignUpTap(BuildContext context) {
-    Navigator.of(context).pop();
+    Navigator.of(context).pop("Hello!");
   }
 
   void _onEmailLoginTap(BuildContext context) {
@@ -33,23 +35,27 @@ class LoginScreen extends StatelessWidget {
               Gaps.v80,
               const Text(
                 "Log in to TikTok",
+                //  style: Theme.of(context).textTheme.headlineSmall,
                 style: TextStyle(
                   fontSize: Sizes.size24,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               Gaps.v20,
-              const Text(
-                "Manage your account, check notifications, comment on videos, and more",
-                style: TextStyle(
-                  fontSize: Sizes.size16,
-                  color: Colors.black45,
+              const Opacity(
+                opacity: 0.7,
+                child: Text(
+                  "Manage your account, check notifications, comment on videos, and more",
+                  style: TextStyle(
+                    fontSize: Sizes.size16,
+                    //color: Colors.black45,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
               Gaps.v40,
               GestureDetector(
-                onTap: ()=>_onEmailLoginTap(context),
+                onTap: () => _onEmailLoginTap(context),
                 child: const AuthButton(
                   icon: FaIcon(
                     FontAwesomeIcons.user,
@@ -68,11 +74,13 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.grey.shade50,
-        elevation: 1,
+      bottomNavigationBar: Container(
+        color: isDarkMode(context) ? null : Colors.grey.shade50,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: Sizes.size20),
+          padding: const EdgeInsets.only(
+            top: Sizes.size32,
+            bottom: Sizes.size32,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/utils.dart';
 
 class ChatDetailScreen extends StatefulWidget {
   const ChatDetailScreen({super.key});
@@ -11,14 +12,13 @@ class ChatDetailScreen extends StatefulWidget {
 }
 
 class _ChatDetailScreenState extends State<ChatDetailScreen> {
-
-
   void _stopCommenting() {
     FocusScope.of(context).unfocus();
   }
 
   @override
   Widget build(BuildContext context) {
+    final isDark = isDarkMode(context);
     return Scaffold(
       appBar: AppBar(
         title: ListTile(
@@ -59,18 +59,18 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
             ),
           ),
           subtitle: const Text("Active now"),
-          trailing: const Row(
+          trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               FaIcon(
                 FontAwesomeIcons.flag,
-                color: Colors.black,
+                color: isDark ? Colors.grey.shade400 : Colors.black,
                 size: Sizes.size20,
               ),
               Gaps.h32,
               FaIcon(
                 FontAwesomeIcons.ellipsis,
-                color: Colors.black,
+                color: isDark ? Colors.grey.shade400 : Colors.black,
                 size: Sizes.size20,
               ),
             ],
@@ -133,7 +133,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               bottom: 0,
               width: MediaQuery.of(context).size.width,
               child: BottomAppBar(
-                color: Colors.grey.shade100,
+                //  color: Colors.grey.shade100,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: Sizes.size10,
@@ -144,29 +144,32 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                     children: [
                       Expanded(
                         child: TextField(
-                           showCursor: false,
+                          showCursor: false,
                           decoration: InputDecoration(
-                              hintText: "Send a message...",
-                              hintStyle: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: Sizes.size18,
+                            hintText: "Send a message...",
+                            hintStyle: TextStyle(
+                              color:
+                                  isDark ? Colors.grey.shade700 : Colors.grey,
+                              fontSize: Sizes.size18,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                Sizes.size20,
                               ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                  Sizes.size20,
-                                ),
-                                borderSide: BorderSide.none, // margin 같은거 의미
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: Sizes.size12,
-                                // vertical: Sizes.size10, -> 제대로 동작안해서 TextFiled를 Sizedbox로 감싸야함.
-                              ),
-                              suffix: const FaIcon(
-                                FontAwesomeIcons.faceSmile,
-                                size: Sizes.size24,
-                              )),
+                              borderSide: BorderSide.none, // margin 같은거 의미
+                            ),
+                            filled: true,
+                            fillColor:
+                                isDark ? Colors.grey.shade300 : Colors.white,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: Sizes.size12,
+                              // vertical: Sizes.size10, -> 제대로 동작안해서 TextFiled를 Sizedbox로 감싸야함.
+                            ),
+                            suffix: const FaIcon(
+                              FontAwesomeIcons.faceSmile,
+                              size: Sizes.size24,
+                            ),
+                          ),
                         ),
                       ),
                       Gaps.h20,

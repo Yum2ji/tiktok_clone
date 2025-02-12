@@ -5,6 +5,7 @@ import 'package:tiktok_clone/features/authentication/email_screen.dart';
 import 'package:tiktok_clone/features/authentication/widgets/form_botton.dart';
 
 class UsernameScreen extends StatefulWidget {
+  static String routeName = "/username";
   const UsernameScreen({super.key});
 
   @override
@@ -17,7 +18,6 @@ class _UsernameScreenState extends State<UsernameScreen> {
 
   @override
   void initState() {
-
     super.initState();
     _usernameConroller.addListener(() {
       setState(() {
@@ -25,7 +25,6 @@ class _UsernameScreenState extends State<UsernameScreen> {
       });
     });
   }
-  
 
   @override
   void dispose() {
@@ -34,16 +33,25 @@ class _UsernameScreenState extends State<UsernameScreen> {
     super.dispose();
   }
 
-  
-  void _onNextTap(){
-    if(_username.isEmpty) return;
-    
+  void _onNextTap() {
+    if (_username.isEmpty) return;
+
     //여기서는 context로 input 받지않음. stateful 위젯으로 하면 context 받음
     //context input으로정의해도 되긴함.
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context)=>const EmailScreen())
+/*     Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EmailScreen(),
+      ),
+    ); */
+
+    Navigator.pushNamed(
+      context,
+      EmailScreen.routeName,
+      arguments: EmailScreenArgs(
+        username: _username,
+      ),
     );
-  
   }
 
   @override
@@ -99,8 +107,8 @@ class _UsernameScreenState extends State<UsernameScreen> {
             Gaps.v16,
             //TextButton 같은거로 써도되긴하는데 anaimated하기 더편한
             GestureDetector(
-              onTap: _onNextTap,
-              child: FormButton(disabled: _username.isEmpty)),
+                onTap: _onNextTap,
+                child: FormButton(disabled: _username.isEmpty)),
           ],
         ),
       ),

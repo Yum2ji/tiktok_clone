@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/utils.dart';
 
 class ActivityScreen extends StatefulWidget {
   const ActivityScreen({super.key});
@@ -119,6 +120,7 @@ addListener, animationbuilder 나 setstate 없이 property _animationcontroller,
 
   @override
   Widget build(BuildContext context) {
+    final isDark =isDarkMode(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -200,25 +202,25 @@ addListener, animationbuilder 나 setstate 없이 property _animationcontroller,
                       width: Sizes.size52,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white,
+                        color: isDark? Colors.grey.shade800 :  Colors.white,
                         border: Border.all(
-                          color: Colors.grey.shade400,
+                          color:isDark? Colors.grey.shade800 : Colors.grey.shade400,
                           width: Sizes.size1,
                         ),
                       ),
                       child: const Center(
                         child: FaIcon(
                           FontAwesomeIcons.bell,
-                          color: Colors.black,
+                         // color: Colors.black,
                         ),
                       ),
                     ),
                     title: RichText(
                       text: TextSpan(
                         text: "Account update:",
-                        style: const TextStyle(
+                        style:  TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: Colors.black,
+                          color: isDark? null : Colors.black,
                           fontSize: Sizes.size20,
                         ),
                         children: [
@@ -261,9 +263,9 @@ addListener, animationbuilder 나 setstate 없이 property _animationcontroller,
           SlideTransition(
             position: _panelAnimation,
             child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
+              decoration:  BoxDecoration(
+                color: Theme.of(context).appBarTheme.backgroundColor,
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(
                     Sizes.size5,
                   ),
@@ -280,9 +282,9 @@ addListener, animationbuilder 나 setstate 없이 property _animationcontroller,
                       title: Row(
                         children: [
                           //ListTile leading 이면 너무 text랑 떨어진 것 같아서 Row로 바꿔버림
-                          FaIcon(
+                          Icon(
                             tab["icon"],
-                            color: Colors.black,
+                           // color: Colors.black,
                             size: Sizes.size16,
                           ),
                           Gaps.h20,

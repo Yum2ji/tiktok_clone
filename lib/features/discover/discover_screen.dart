@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/breakpoint.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/utils.dart';
 
 final tabs = [
   "Top",
@@ -77,6 +78,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               maxWidth: Breakpoints.sm,
             ),
             child: CupertinoSearchTextField(
+              style: TextStyle(
+                color: isDarkMode(context) ? Colors.white:Colors.black,
+              ),
                     controller: _textEditingController,
                     onChanged: _onSearchChanged,
                     onSubmitted: _onSearchSubmitted,
@@ -115,15 +119,19 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             tabs: [
               for (var tab in tabs) Tab(text: tab),
             ],
-            unselectedLabelColor: Colors.grey.shade500,
+            //Main에 지정정
+/*             unselectedLabelColor: Colors.grey.shade500,
             labelColor: Colors.black,
+                         */
             labelStyle: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: Sizes.size16,
             ),
-            indicatorColor: Colors.black,
             indicatorSize: TabBarIndicatorSize.tab,
             splashFactory: NoSplash.splashFactory,
+              
+              //아래처럼 적어줘야지만 동작 main에서만 적으면 동작안하는 bug
+              indicatorColor: Theme.of(context).tabBarTheme.indicatorColor,
           ),
         ),
         body: TabBarView(
@@ -177,23 +185,25 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       ),
                     ),
                     Gaps.v10,
-                    Text(
-                      "${constraints.maxWidth} This is a very long caption for my tiktok that I'm upload just now currently.",
-                      style: const TextStyle(
+                    const Text(
+                      "This is a very long caption for my tiktok that I'm upload just now currently.",
+                      style: TextStyle(
                         fontSize: Sizes.size16 + Sizes.size2,
                         fontWeight: FontWeight.bold,
+                      //  height: 1.1,
                       ),
                       maxLines: 2,
+                     
                       overflow: TextOverflow.ellipsis,
                     ),
                     Gaps.v8,
-                    if (constraints.maxWidth < 200 ||
+                    if (constraints.maxWidth < 220 ||
                         constraints.maxWidth > 250)
                       DefaultTextStyle(
                         //DefaultTextStyle 로 하면 자식노드는 따로 지정하지 않는 한, 같은 style 을 가짐.
 
                         style: TextStyle(
-                          color: Colors.grey.shade600,
+                          color: isDarkMode(context) ? Colors.grey.shade300: Colors.grey.shade600,
                           fontWeight: FontWeight.w600,
                         ),
                         child: Row(

@@ -2,31 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/breakpoint.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/utils.dart';
 
 class PersistentTabbar extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-
+        final isDark = isDarkMode(context);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appBarTheme.backgroundColor,
         border: Border.symmetric(
           horizontal: BorderSide(
-            color: Colors.grey.shade300,
+            color:isDark? Colors.grey.shade700 : Colors.grey.shade300,
             width: 1,
           ),
         ),
       ),
-      child: const TabBar(
+      child:  TabBar(
         indicatorSize: TabBarIndicatorSize.label,
-        indicatorColor: Colors.black,
-        labelPadding: EdgeInsets.symmetric(
+        indicatorColor:Theme.of(context).tabBarTheme.indicatorColor,
+        labelPadding: const EdgeInsets.symmetric(
           vertical: Sizes.size10,
         ),
-        labelColor: Colors.black,
-        tabs: [
+       // labelColor: Colors.black,
+        tabs: const [
           //굳이 padding으로 icon 감싼 이유는..
           //indicatorSize TabBarIndicatorSize.label 로 적절한 크키로 표기가 안되어서서
           Padding(

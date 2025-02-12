@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/generated/l10n.dart';
+import 'package:tiktok_clone/utils.dart';
 
 class VideoComments extends StatefulWidget {
   const VideoComments({super.key});
@@ -33,10 +35,9 @@ class _VideoCommentsState extends State<VideoComments> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
+    final isDark = isDarkMode(context);
     final size = MediaQuery.of(context).size;
     return Container(
       //scaffold 둥그렇게 모서리 접히게 하려면 deco 말고도 clipbehavior 필요
@@ -49,13 +50,13 @@ class _VideoCommentsState extends State<VideoComments> {
         ),
       ),
       child: Scaffold(
-        backgroundColor: Colors.grey.shade50,
+        backgroundColor: isDark ? null : Colors.grey.shade50,
         appBar: AppBar(
-          backgroundColor: Colors.grey.shade50,
+          backgroundColor: isDark ? null : Colors.grey.shade50,
           centerTitle: true,
           automaticallyImplyLeading: false,
-          title: const Text(
-            "22796 comments",
+          title:  Text(
+            S.of(context).commentTitle(1, 1),
           ),
           actions: [
             IconButton(
@@ -71,27 +72,28 @@ class _VideoCommentsState extends State<VideoComments> {
           child: Stack(
             children: [
               Scrollbar(
-                controller:_scrollController ,
+                controller: _scrollController,
                 child: ListView.separated(
                   //ListView.separted의 controller도 sccrollbar와 동일 controller를 사용한다함.-댓글에서 봄
                   controller: _scrollController,
                   padding: const EdgeInsets.only(
                     top: Sizes.size10,
                     left: Sizes.size16,
-                    right :Sizes.size16,
-                    
+                    right: Sizes.size16,
+
                     //bottom을 엄청 크게줘야. bottomAppBar 뒤에 안가려지는는
                     //사실 안드로이드에서는 가려지지는 않는것 같지만, scroll 햇을 정도 여겨짐짐
-                    bottom: Sizes.size96+Sizes.size1, 
+                    bottom: Sizes.size96 + Sizes.size1,
                   ),
                   itemCount: 10,
                   separatorBuilder: (context, index) => Gaps.v20,
                   itemBuilder: (context, index) => Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const CircleAvatar(
+                      CircleAvatar(
                         radius: 18,
-                        child: Text("유미"),
+                        backgroundColor: isDark ? Colors.grey.shade600 : null,
+                        child: const Text("유미"),
                       ),
                       Gaps.h10,
                       Expanded(
@@ -137,14 +139,17 @@ class _VideoCommentsState extends State<VideoComments> {
               Positioned(
                 bottom: 0,
                 width: size.width,
-                // bottomnavigation으로 scaffold에 만들어주면 
+                // bottomnavigation으로 scaffold에 만들어주면
                 //키보드 생겼을때 적고 있는 값이 안보여서 이렇게 할 수밖에 없음.
-                child: BottomAppBar(
-                  color: Colors.white,
+                child: Container(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  // color: Colors.white,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.size4,
-                      vertical: Sizes.size5,
+                    padding: const EdgeInsets.only(
+                      left: Sizes.size16,
+                      right: Sizes.size16,
+                      top: Sizes.size16,
+                      bottom: Sizes.size32,
                     ),
                     child: Row(
                       children: [
@@ -181,25 +186,33 @@ class _VideoCommentsState extends State<VideoComments> {
                                     children: [
                                       FaIcon(
                                         FontAwesomeIcons.at,
-                                        color: Colors.grey.shade900,
+                                        color: isDark
+                                            ? Colors.grey.shade400
+                                            : Colors.grey.shade900,
                                       ),
                                       Gaps.h10,
                                       FaIcon(
                                         FontAwesomeIcons.gift,
-                                        color: Colors.grey.shade900,
+                                        color: isDark
+                                            ? Colors.grey.shade400
+                                            : Colors.grey.shade900,
                                       ),
                                       Gaps.h10,
                                       FaIcon(
                                         FontAwesomeIcons.faceSmile,
-                                        color: Colors.grey.shade900,
+                                        color: isDark
+                                            ? Colors.grey.shade400
+                                            : Colors.grey.shade900,
                                       ),
                                       Gaps.h10,
                                       if (_isWriting)
                                         GestureDetector(
-                                          onTap: _stopCommenting , // 여기는 나중에 firebae연동하고 바꿀것
+                                          onTap:
+                                              _stopCommenting, // 여기는 나중에 firebae연동하고 바꿀것
                                           child: FaIcon(
                                             FontAwesomeIcons.circleArrowUp,
-                                            color: Theme.of(context).primaryColor,
+                                            color:
+                                                Theme.of(context).primaryColor,
                                           ),
                                         ),
                                     ],
@@ -213,7 +226,9 @@ class _VideoCommentsState extends State<VideoComments> {
                                   borderSide: BorderSide.none, // margin 같은거 의미
                                 ),
                                 filled: true,
-                                fillColor: Colors.grey.shade200,
+                                fillColor: isDark
+                                    ? Colors.grey.shade800
+                                    : Colors.grey.shade200,
                                 contentPadding: const EdgeInsets.symmetric(
                                   horizontal: Sizes.size12,
                                   // vertical: Sizes.size10, -> 제대로 동작안해서 TextFiled를 Sizedbox로 감싸야함.

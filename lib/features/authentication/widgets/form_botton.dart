@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/utils.dart';
 
 class FormButton extends StatelessWidget {
   const FormButton({
@@ -21,7 +22,9 @@ class FormButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color: disabled
-              ? Colors.grey.shade300
+              ? isDarkMode(context)
+                  ? Colors.grey.shade800
+                  : Colors.grey.shade300
               : Theme.of(context).primaryColor,
         ),
         //AnimatedConainer 는 child 에 aimation주지는 않음

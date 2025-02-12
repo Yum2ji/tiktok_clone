@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/main_navigation/main_navigation_screen.dart';
+import 'package:tiktok_clone/utils.dart';
 
 /* 
                     //// Swipe 하는걸로 할거면 (fadin 느낌) 이코드로
@@ -37,16 +38,16 @@ class _TutorialScreenState extends State<TutorialScreen> {
   Direction _direction = Direction.right;
   Page _showingPage = Page.first;
 
-  void _onEnterAppTapp(){
+  void _onEnterAppTapp() {
     // Navogator.of(context).push를 쓰면 로그인하고 다음 페이지 넘어가도 다시 뒤로로 가는 문제존재.
 // 따라서, pushAndRemoveUntil을 사용.
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
-            (route) {
-              //predicate, 여기는 previous route 쓸지 안쓸지를 정하는 부분임.
-              //return false 하면 항상, 모든 내용을 안쓰게 됨.
-          return false;
-        });
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
+        (route) {
+      //predicate, 여기는 previous route 쓸지 안쓸지를 정하는 부분임.
+      //return false 하면 항상, 모든 내용을 안쓰게 됨.
+      return false;
+    });
   }
 
   void _onPanUpdate(DragUpdateDetails details) {
@@ -138,21 +139,21 @@ class _TutorialScreenState extends State<TutorialScreen> {
             ),
           ),
         ),
-        bottomNavigationBar: BottomAppBar(
-          color: Colors.white,
-          elevation: 1,
-          height: 140,
+        bottomNavigationBar: Container(
+          color: isDarkMode(context) ? Colors.black : Colors.white,
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: Sizes.size24,
-              horizontal: Sizes.size24,
+            padding: const EdgeInsets.only(
+              top: Sizes.size32,
+              bottom: Sizes.size32,
+              left: Sizes.size24,
+              right: Sizes.size24,
             ),
             child: AnimatedOpacity(
               duration: const Duration(
                 milliseconds: 300,
               ),
               //button 나타내고 아닐때 opacity로 이용
-              opacity: _showingPage == Page.first? 0 : 1 ,
+              opacity: _showingPage == Page.first ? 0 : 1,
               child: CupertinoButton(
                 onPressed: _onEnterAppTapp,
                 color: Theme.of(context).primaryColor,

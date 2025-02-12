@@ -1,3 +1,18 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Android Gradle Plugin 버전 업데이트
+        classpath 'com.android.tools.build:gradle:7.3.1' // 버전 7.3.1로 수정
+
+        // Kotlin Gradle Plugin 버전 업데이트
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0" // Kotlin Gradle Plugin 버전 업데이트
+    }
+}
+
+
 allprojects {
     repositories {
         google()
