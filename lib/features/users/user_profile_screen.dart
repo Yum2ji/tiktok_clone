@@ -11,7 +11,13 @@ import 'package:tiktok_clone/features/users/widgets/persistent_tabbar.dart';
 import 'package:tiktok_clone/utils.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({super.key});
+  final String username;
+  //final String tab;
+  const UserProfileScreen({
+    super.key,
+    required this.username,
+   // required this.tab,
+  });
 
   @override
   State<UserProfileScreen> createState() => _UserProfileScreenState();
@@ -33,6 +39,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       body: SafeArea(
         child: DefaultTabController(
+          //initialIndex: widget.tab == "likes"? 1 : 0,
           length: 2,
           //CustomScrollView를 NestScrollView로 바꿈
           // 사유는 NestScrollView 로 scroll 가능한 widget들을 link 해서 하나로 control 하도록 하기때문문
@@ -42,7 +49,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               return [
                 SliverAppBar(
                   centerTitle: true,
-                  title: const Text("Yumi"),
+                  title: Text(widget.username),
                   actions: [
                     IconButton(
                       onPressed: _onGearPressed,
@@ -69,22 +76,23 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   Gaps.v20,
                                   Column(
                                     children: [
-                                      const CircleAvatar(
+                                      CircleAvatar(
                                         radius: 50,
-                                        foregroundImage: NetworkImage(
+                                        foregroundImage: const NetworkImage(
                                           "https://i.ytimg.com/vi/LYKTtPFB9b4/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBHxhTHbXz0HzU6pp4GLK-98XPQnw",
                                         ),
                                         child: Text(
-                                            "Yumi"), //refresh 하면 짧은순간에 이름이 보이는 이런 효과추구하려면 text도 적는게좋을듯
+                                          widget.username,
+                                        ), //refresh 하면 짧은순간에 이름이 보이는 이런 효과추구하려면 text도 적는게좋을듯
                                       ),
                                       Gaps.v20,
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          const Text(
-                                            "@YumiYumi",
-                                            style: TextStyle(
+                                          Text(
+                                            "@${widget.username}",
+                                            style: const TextStyle(
                                               fontWeight: FontWeight.w600,
                                               fontSize: Sizes.size18,
                                             ),

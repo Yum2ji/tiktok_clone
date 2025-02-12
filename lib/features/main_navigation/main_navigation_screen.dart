@@ -102,7 +102,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     return Scaffold(
       //resizeToAvoidBottomInset : bottomNaviagation 같은 것에 의해 생겨서, 키보드가 생기면 화면 resizing이 됨. 해당 현상을 막으려함.
       resizeToAvoidBottomInset: false,
-      backgroundColor: _selectedIndex == 0 ||isDark? Colors.black : Colors.white,
+      backgroundColor:
+          _selectedIndex == 0 || isDark ? Colors.black : Colors.white,
       body: Stack(
         children: [
           //build 되지만 visually hide.
@@ -121,17 +122,19 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 4,
-            child: const UserProfileScreen(),
+            child: const UserProfileScreen(
+              username: "Yumi",
+             // tab: "",
+            ),
           ),
         ],
       ), // screens.elementAt(_selectedIndex),
       bottomNavigationBar: Container(
-        color: _selectedIndex == 0 || isDark? Colors.black : Colors.white,
+        color: _selectedIndex == 0 || isDark ? Colors.black : Colors.white,
         child: Padding(
           padding: const EdgeInsets.only(
             bottom: Sizes.size32,
             top: Sizes.size16,
-
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,

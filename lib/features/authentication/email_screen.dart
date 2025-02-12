@@ -13,10 +13,14 @@ class EmailScreenArgs{
 }
 
 class EmailScreen extends StatefulWidget {
-  static String routeName = "/email";
+  static String routeURL = "email"; // child 방식으로 하면 /가 필요없음음
+  static String routeName = "email";
+  //go_router에서 emailscreensargs 값을 받으므로.
+  // final String username ; 이게 생긴것것
+  final String username ;
 
 
-  const EmailScreen({super.key,});
+  const EmailScreen({super.key, required this.username,});
 
   @override
   State<EmailScreen> createState() => _EmailScreenState();
@@ -60,7 +64,7 @@ class _EmailScreenState extends State<EmailScreen> {
   void _onScaffoldTap() {
     FocusScope.of(context).unfocus();
   }
-
+  
   void _onSubmit() {
     if (_email.isEmpty || _isEmailValid() != null) return;
 
@@ -75,8 +79,9 @@ class _EmailScreenState extends State<EmailScreen> {
   @override
   Widget build(BuildContext context) {
     //settings.argument를 사용하면  ModalRoute.of(context)!에 전달된 인자를 받을 수 있음.
-    final args =ModalRoute.of(context)!.settings.arguments as EmailScreenArgs;
-    print(args.username);
+    //go_router에서 emailscreensargs 값을 받으므로.아래 내용은 삭제제
+   // final args =ModalRoute.of(context)!.settings.arguments as EmailScreenArgs;
+   // print(args.username);
     return GestureDetector(
       onTap: _onScaffoldTap,
       child: Scaffold(
@@ -94,7 +99,8 @@ class _EmailScreenState extends State<EmailScreen> {
             children: [
               Gaps.v40,
                 Text(
-                "What is your email? ${args.username}",
+                  "What is your email? ${widget.username}",
+               // "What is your email? ${args.username}",
                 style: const TextStyle(
                   fontSize: Sizes.size24,
                   fontWeight: FontWeight.w700,

@@ -10,6 +10,7 @@ import 'package:tiktok_clone/features/authentication/username_screen.dart';
 import 'package:tiktok_clone/features/main_navigation/main_navigation_screen.dart';
 import 'package:tiktok_clone/features/settings/settings_screen.dart';
 import 'package:tiktok_clone/generated/l10n.dart';
+import 'package:tiktok_clone/router.dart';
 
 //import 'package:flutter_gen/gen_l10n/intl_generated.dart';
 
@@ -45,7 +46,10 @@ class TikTokApp extends StatelessWidget {
   Widget build(BuildContext context) {
     //아래처럼하면 휴대폰에서 설정안바꿔도됨.
     //S.load(const Locale("en"));
-    return MaterialApp(
+
+    //go_routere 사용하면서 MaterailApp 말고 MaterialApp.router 사용
+    return MaterialApp.router(
+      routerConfig: router,
       debugShowCheckedModeBanner: false, // debug 할 때 우측상단에 뜨는거 삭제제
       title: 'TikTok Clone',
 
@@ -187,16 +191,6 @@ class TikTokApp extends StatelessWidget {
         ),
       ),
       // home: const SignUpScreen(),
-
-      // 여기서 직접 작성하면 각 페이지에서 작성할때 실수 날 수 있어서
-      //각 widget의 변수를 가져오도록
-      initialRoute: SignUpScreen.routeName,
-      routes: {
-        SignUpScreen.routeName: (context) => const SignUpScreen(),
-        UsernameScreen.routeName: (context) => const UsernameScreen(),
-        LoginScreen.routeName: (context) => const LoginScreen(),
-        EmailScreen.routeName:(context) => const EmailScreen(),
-      },
     );
   }
 }

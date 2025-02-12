@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
@@ -7,13 +8,15 @@ import 'package:tiktok_clone/features/authentication/login_screen.dart';
 import 'package:tiktok_clone/features/authentication/username_screen.dart';
 import 'package:tiktok_clone/features/authentication/widgets/auth_button.dart';
 import 'package:tiktok_clone/generated/l10n.dart';
+import 'package:tiktok_clone/router.dart';
 import 'package:tiktok_clone/utils.dart';
 
 //자동으로  복사가 안된다는 단점.
 //import 'package:flutter_gen/gen_l10n/intl_generated.dart';
 
 class SignUpScreen extends StatelessWidget {
-  static String routeName = "/";
+  static String routeURL = "/";
+  static const routeName ="signUp";
   const SignUpScreen({super.key});
 
   void _onLogInTap(BuildContext context) async {
@@ -24,8 +27,14 @@ class SignUpScreen extends StatelessWidget {
     );
     print(result); */
 
-    final result = await  Navigator.of(context).pushNamed(LoginScreen.routeName);
-    print(result);
+//router version1
+/*     final result = await  Navigator.of(context).pushNamed(LoginScreen.routeName);
+    print(result); */
+  
+  //router version2 - go_router
+    context.push(LoginScreen.routeName);
+   //go 는 stack으로 쌓이는 구조는 아닌 => web에서 back 버튼이 없어지는 stack 구조가 아니라.
+  // context.go(LoginScreen.routeName);
   }
 
   void _onEmailTap(BuildContext context) {
@@ -75,7 +84,16 @@ class SignUpScreen extends StatelessWidget {
       ),
     ); */
   
-    Navigator.of(context).pushNamed(UsernameScreen.routeName);
+ //   Navigator.of(context).pushNamed(UsernameScreen.routeName);
+    
+    //변수를 주소에 넣어주는 경우 -param 사용
+   // context.push("/users/yumi?show=likes");
+  //go router에서 name 설정안된경우
+  // context.push(UsernameScreen.routeName);
+  // go router에서 name 설정된 경우
+ // context.pushNamed("username_screen");
+ //go router에서 child router 사용하는경우우
+context.pushNamed(UsernameScreen.routeName);
   }
 
   @override
