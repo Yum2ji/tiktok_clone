@@ -57,14 +57,14 @@ class _UsernameScreenState extends State<UsernameScreen> {
     ); */
 
 /*     context.push(
-      EmailScreen.routeName,
+      EmailScreen.routeName, // 여기서는 "/email" 과 같은 url 형태였음
       extra: EmailScreenArgs(
         username: _username,
       ),
     ); */
 
     context.pushNamed(
-      EmailScreen.routeName,
+      EmailScreen.routeName, // 여기서는 "email" 과 같은 name 형태임.
       extra: EmailScreenArgs(
         username: _username,
       ),
