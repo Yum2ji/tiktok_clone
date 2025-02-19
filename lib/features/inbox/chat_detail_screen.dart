@@ -5,7 +5,11 @@ import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/utils.dart';
 
 class ChatDetailScreen extends StatefulWidget {
-  const ChatDetailScreen({super.key});
+  static const String routeName = "chatDetail";
+  static const String routURL = ":chatId"; //자식경로는 /로 시작 불가능함 router에서 routes 로 정의했기 때문
+  
+  final String chatId ;
+ const ChatDetailScreen({super.key, required this.chatId});
 
   @override
   State<ChatDetailScreen> createState() => _ChatDetailScreenState();
@@ -52,9 +56,9 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               ),
             ],
           ),
-          title: const Text(
-            "Yumi",
-            style: TextStyle(
+          title:  Text(
+            "Yumi (${widget.chatId})",
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
             ),
           ),

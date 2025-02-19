@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tiktok_clone/common/video_config/video_config.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/videos/repos/video_playback_config_repo.dart';
+import 'package:tiktok_clone/features/videos/view_models/playback_config_vm.dart';
 import 'package:tiktok_clone/generated/l10n.dart';
 import 'package:tiktok_clone/router.dart';
 
@@ -27,9 +32,24 @@ void main() async {
     SystemUiOverlayStyle.dark,
   );
 
-  //widget이 생성되기 전에 engine셋팅하고 싶으면 이 부분 이전에.
-  //engin하고 widget 연결확실하게   --WidgetsFlutterBinding.ensureInitialized();
-  runApp(const TikTokApp());
+  //shared_preferences 사용하고 있음.
+  //videos >> repos >> video_playback_config_repo
+  //repository 는 preference를 넘겨져서 초기화 되어야지만  PlaybackConfigViewModel 에서 쓸 수 있음.
+  final preferences = await SharedPreferences.getInstance();
+  final repository = PlaybackConfigRepository(preferences);
+
+  // preferences 값 자체를 TikTokApp에서 할 수 없음. main에서만 가느함
+  // 그렇기 때문에 Multiprovider로 감싸는 것도 TikTokApp 이 아닌 main 에서 사용하는.
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => PlaybackConfigViewModel(repository),
+        )
+      ],
+      child: const TikTokApp(),
+    ),
+  );
 }
 
 class TikTokApp extends StatelessWidget {
@@ -41,7 +61,20 @@ class TikTokApp extends StatelessWidget {
     //아래처럼하면 휴대폰에서 설정안바꿔도됨.
     //S.load(const Locale("en"));
 
-    //go_routere 사용하면서 MaterailApp 말고 MaterialApp.router 사용
+    //1)주의 VideoConfig 로 build 될 때 child도 같이 rebuid 되는데
+    //MAterialApp.router가 child 이므로 해당 widget 전체가 항상 같이 rebuild 된다는 걸 알고
+
+    //2)  provier관련 - MaterialApp.router를 ChangeNotifierProvider로 감싸는 경우
+
+    //3 provider 여러개인 경우
+    //이렇게 Multiprovider로 하면 context.read 또는 context.watch로 어디에서든 지 접근가능
+/*     MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => VideoConfig(),
+        ),
+      ], */
+
     return MaterialApp.router(
       routerConfig: router,
       debugShowCheckedModeBanner: false, // debug 할 때 우측상단에 뜨는거 삭제제
@@ -49,30 +82,30 @@ class TikTokApp extends StatelessWidget {
 
       // 강제 바꿀때는 페이지를  아래와 같잉 Localizations.override( widdget으로 감싸기기
       /*
-      Localizations.override(
-      context:context,
-      locale: const Locale("es"),
-       */
+        Localizations.override(
+        context:context,
+        locale: const Locale("es"),
+         */
 
       //flutter에서 제공하는 default 번역파일
       /*        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-         */
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+           */
       //이렇게 하면 알아서 휴대폰의 언어 파악해서 기본 widget은 번역됨
-/*       localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-
-        //아래는 직접 만든거
-        AppLocalizations.delegate,
-      ], */
-/*       supportedLocales: const [
-        Locale("en"),
-        Locale("ko"),
-        Locale("es"),
-      ], */
+      /*       localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+      
+          //아래는 직접 만든거
+          AppLocalizations.delegate,
+        ], */
+      /*       supportedLocales: const [
+          Locale("en"),
+          Locale("ko"),
+          Locale("es"),
+        ], */
       // flutter gen-l10n로 "-l10n.yaml" 직접 만들면 AppLocalization이 몇 개 있는지 아는
       //localizationsDelegates: AppLocalizations.localizationsDelegates,
       //supportedLocales: AppLocalizations.supportedLocales,
@@ -100,12 +133,12 @@ class TikTokApp extends StatelessWidget {
         // 1_여기서 flutter 코드 copy"https://m2.material.io/design/typography/the-type-system.html#type-scale"
         //2_ material 3에 해당하는 실물크기 확인 :https://m3.material.io/styles/typography/type-scale-tokens
         //3_또는 GoogleFonts.(원하는폰트)
-/*         textTheme: GoogleFonts.itimTextTheme(
-          ThemeData(
-            brightness: Brightness.dark,
-          ).textTheme,
-        ),
-     */
+        /*         textTheme: GoogleFonts.itimTextTheme(
+            ThemeData(
+              brightness: Brightness.dark,
+            ).textTheme,
+          ),
+       */
         scaffoldBackgroundColor: Colors.black,
         //4_직접사이즈 같은거 하고 싶을때때 font랑 칼라만 있는거 사용용  textTheme : Typography.blackMountainView,
         textTheme: Typography.whiteMountainView,
@@ -140,15 +173,15 @@ class TikTokApp extends StatelessWidget {
         ),
       ),
 
-//사실 ThemeDatA로 다 정의안하고, 이미 있는 값 사용가능.
-//https://pub.dev/packages/flex_color_scheme
+      //사실 ThemeDatA로 다 정의안하고, 이미 있는 값 사용가능.
+      //https://pub.dev/packages/flex_color_scheme
       theme: ThemeData(
         useMaterial3: true,
         bottomAppBarTheme: BottomAppBarTheme(
           color: Colors.grey.shade50,
         ),
 
-/*         textTheme: GoogleFonts.itimTextTheme(), */
+        /*         textTheme: GoogleFonts.itimTextTheme(), */
         //직접사이즈 같은거 하고 싶을때때 -- Typography.blackCupertino,
 
         textTheme: Typography.blackMountainView,

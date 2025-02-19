@@ -1,10 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:tiktok_clone/common/video_config/video_config.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
-import 'package:tiktok_clone/features/videos/widgets/video_button.dart';
-import 'package:tiktok_clone/features/videos/widgets/video_comments.dart';
+import 'package:tiktok_clone/features/videos/view_models/playback_config_vm.dart';
+import 'package:tiktok_clone/features/videos/views/widgets/video_button.dart';
+import 'package:tiktok_clone/features/videos/views/widgets/video_comments.dart';
 import 'package:tiktok_clone/generated/l10n.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -28,6 +31,10 @@ class _VideoPostState extends State<VideoPost>
       VideoPlayerController.asset("assets/videos/video_flag.mp4");
 
   bool _isPaused = false;
+
+  // bool _autoMute = videoConfig.value;
+//   bool _autoMute = videoConfig.autoMute; // 이건 changenotifier
+
   final Duration _animationDuration = const Duration(milliseconds: 200);
 
   //Animation 위젯을 직접만드는 경우. AnimationOpacity 같은거 사용하지않고 직접 customize.
@@ -92,6 +99,10 @@ class _VideoPostState extends State<VideoPost>
       duration: _animationDuration,
     );
 
+    context
+        .read<PlaybackConfigViewModel>()
+        .addListener(_onPlaybackConfigChanged);
+
     //이걸 하지 않으면 _animationController.revere, forward만 했을 때 끊겨 보임.
     //우리는 lower/upper 사이에 중간값들로 setsTate 해서 build 해줘야함.
     //Animatedopacity를 Transform.scale로 직접 감싸는 경우에만 사용
@@ -101,6 +112,30 @@ class _VideoPostState extends State<VideoPost>
 
     //   });
     // });
+
+    // videoConfig.automute 값이 바뀌는 걸 이렇게해야함.
+    //settingscreen에서와 같이 animationbuilder로 쓰는 방법도 있고
+    // 아래처럼 addLister로 쓰는 방법도 있음.
+/*     videoConfig.addListener((){
+        setState(() {
+          _autoMute = videoConfig.value;
+        // _autoMute = videoConfig.autoMute; //이건 changenotifier 사용할때때
+      });
+    }
+    ); */
+  }
+
+  void _onPlaybackConfigChanged() {
+    //dead video (_videoPlayerController)의 값을 사용하면 에러 날 수 있음
+    //mounted로 구분분
+    if(!mounted) return;
+    
+    final muted = context.read<PlaybackConfigViewModel>().muted;
+    if (muted) {
+      _videoPlayerController.setVolume(0);
+    } else {
+      _videoPlayerController.setVolume(1);
+    }
   }
 
   @override
@@ -124,7 +159,10 @@ class _VideoPostState extends State<VideoPost>
         !_isPaused //_isPaused 조건을 추가함 android는 괜찮은데. 강의ㅣ에서 영상 멈춘상태로-> refresh 하면 바로 restart되는 현상있어서 추가
         &&
         !_videoPlayerController.value.isPlaying) {
-      _videoPlayerController.play();
+      final autoplay = context.read<PlaybackConfigViewModel>().autoplay;
+      if (autoplay) {
+        _videoPlayerController.play();
+      }
     }
 
     //main_navigation에서 offstage으로 되면 이론적으로 안보일 뿐 alive 는 되어있는거야.
@@ -176,6 +214,13 @@ class _VideoPostState extends State<VideoPost>
 
   @override
   Widget build(BuildContext context) {
+    //상위 위젯에 있는 값 접근 가능
+    // Video_config.dart에 of 관련해서 정의안되면 아래내용
+    // final videoConfg = context.dependOnInheritedWidgetOfExactType<VideoConfig>();
+    // print(videoConfg?.autoMute);
+    // of 생성자 정의하면 아래처럼 간단히 사용가능
+    // VideoConfig.of(context).autoMute;
+
     return VisibilityDetector(
       key: Key("${widget.index}"),
       onVisibilityChanged: _onVisibilityChanged,
@@ -225,6 +270,35 @@ class _VideoPostState extends State<VideoPost>
           ),
 
           Positioned(
+            left: 20,
+            top: 40,
+            child: IconButton(
+              onPressed: () {
+                context.read<PlaybackConfigViewModel>().setMuted(
+                      //여기는 read로 읽음 어차피 onpressed 할때 실행된다는 거아니까
+                      //watch로 계속 보지는 않는
+                      !context.read<PlaybackConfigViewModel>().muted,
+                    );
+                //context.read<VideoConfig>().toggleIsMuted() 이런형식은 multiprovider로 main 정의될때때
+                //context.read<VideoConfig>().toggleIsMuted();
+                // videoConfig.value = !videoConfig.value;
+              },
+              // videoConfig.toggleAutoMute, // 이건 changenotifier쓸때
+              //VideoConfigData.of(context).toggleMuted,
+              icon: FaIcon(
+                //watch는muted 값이 바뀌는지 아닌지를를 notify 하고 있음.
+                context.watch<PlaybackConfigViewModel>().muted
+                    /*                 아래 내용은 multiprovider로 정의될때임./*  */
+                    context.watch<VideoConfig>().isMuted
+ */ // _autoMute
+                    // VideoConfigData.of(context).autoMute
+                    ? FontAwesomeIcons.volumeOff
+                    : FontAwesomeIcons.volumeHigh,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Positioned(
             bottom: 20,
             left: 10,
             child: Column(
@@ -272,7 +346,7 @@ class _VideoPostState extends State<VideoPost>
             right: 10,
             child: Column(
               children: [
-                GestureDetector(
+/*                 GestureDetector(
                   onTap: () {
                     _currentVolume == 0 ? _setVolume(20) : _setVolume(0);
                   },
@@ -283,7 +357,7 @@ class _VideoPostState extends State<VideoPost>
                     color: Colors.white,
                     size: Sizes.size40,
                   ),
-                ),
+                ), */
                 Gaps.v24,
                 const CircleAvatar(
                   radius: 25,
@@ -294,14 +368,14 @@ class _VideoPostState extends State<VideoPost>
                   child: Text("유미"),
                 ),
                 Gaps.v24,
-                 VideoButton(
+                VideoButton(
                   icon: FontAwesomeIcons.solidHeart,
                   text: S.of(context).likeCount(987898),
                 ),
                 Gaps.v24,
                 GestureDetector(
                   onTap: () => _onCommentsTap(context),
-                  child:  VideoButton(
+                  child: VideoButton(
                     icon: FontAwesomeIcons.solidComment,
                     text: S.of(context).commentCount(65654),
                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/authentication/widgets/form_botton.dart';
@@ -34,13 +35,16 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
 
 // Navogator.of(context).push를 쓰면 로그인하고 다음 페이지 넘어가도 다시 뒤로로 가는 문제존재.
 // 따라서, pushAndRemoveUntil을 사용.
-        Navigator.of(context).pushAndRemoveUntil(
+/*         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const InterestsScreen()),
             (route) {
               //predicate, 여기는 previous route 쓸지 안쓸지를 정하는 부분임.
               //return false 하면 항상, 모든 내용을 안쓰게 됨.
           return false;
-        });
+        }); */
+
+        context.goNamed(InterestsScreen.routeName);
+
       }
     }
   }

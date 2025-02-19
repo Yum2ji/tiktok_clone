@@ -7,8 +7,6 @@ import 'package:tiktok_clone/features/authentication/sign_up_screen.dart';
 import 'package:tiktok_clone/features/authentication/widgets/form_botton.dart';
 
 class UsernameScreen extends StatefulWidget {
-  static String routeURL = "username"; // child 방식으로 하면 /가 필요없음음
-  static String routeName = "username";
   const UsernameScreen({super.key});
 
   @override
@@ -41,12 +39,21 @@ class _UsernameScreenState extends State<UsernameScreen> {
 
     //여기서는 context로 input 받지않음. stateful 위젯으로 하면 context 받음
     //context input으로정의해도 되긴함.
-/*     Navigator.push(
+/*      Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => EmailScreen(),
       ),
-    ); */
+    );  */
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EmailScreen(
+          username: _username,
+        ),
+      ),
+    );
 
 /*     Navigator.pushNamed(
       context,
@@ -63,12 +70,12 @@ class _UsernameScreenState extends State<UsernameScreen> {
       ),
     ); */
 
-    context.pushNamed(
+/*     context.pushNamed(
       EmailScreen.routeName, // 여기서는 "email" 과 같은 name 형태임.
       extra: EmailScreenArgs(
         username: _username,
       ),
-    );
+    ); */
   }
 
   @override

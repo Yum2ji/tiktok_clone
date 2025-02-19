@@ -16,7 +16,7 @@ import 'package:tiktok_clone/utils.dart';
 
 class SignUpScreen extends StatelessWidget {
   static String routeURL = "/";
-  static const routeName ="signUp";
+  static const routeName = "signUp";
   const SignUpScreen({super.key});
 
   void _onLogInTap(BuildContext context) async {
@@ -30,19 +30,22 @@ class SignUpScreen extends StatelessWidget {
 //router version1
 /*     final result = await  Navigator.of(context).pushNamed(LoginScreen.routeName);
     print(result); */
-  
-  //router version2 - go_router
-    context.push(LoginScreen.routeName);
-   //go 는 stack으로 쌓이는 구조는 아닌 => web에서 back 버튼이 없어지는 stack 구조가 아니라.
-  // context.go(LoginScreen.routeName);
+
+    //router version2 - go_router
+    //  context.push(LoginScreen.routeName);
+    //go 는 stack으로 쌓이는 구조는 아닌 => web에서 back 버튼이 없어지는 stack 구조가 아니라.
+    // context.go(LoginScreen.routeName);
+
+    context.pushNamed(LoginScreen.routeName);
   }
 
   void _onEmailTap(BuildContext context) {
-/*     Navigator.of(context).push(
-/*       MaterialPageRoute(
+    Navigator.of(context).push(
+      MaterialPageRoute(
         builder: (context) => const UsernameScreen(),
-      ), */
-
+      ),
+    );
+/*
       PageRouteBuilder(
         transitionDuration: const Duration(
           seconds: 1,
@@ -83,17 +86,17 @@ class SignUpScreen extends StatelessWidget {
             const UsernameScreen(),
       ),
     ); */
-  
- //   Navigator.of(context).pushNamed(UsernameScreen.routeName);
-    
+
+    //   Navigator.of(context).pushNamed(UsernameScreen.routeName);
+
     //변수를 주소에 넣어주는 경우 -param 사용
-   // context.push("/users/yumi?show=likes");
-  //go router에서 name 설정안된경우
-  // context.push(UsernameScreen.routeName);
-  // go router에서 name 설정된 경우
- // context.pushNamed("username_screen");
- //go router에서 child router 사용하는경우우
-context.pushNamed(UsernameScreen.routeName);
+    // context.push("/users/yumi?show=likes");
+    //go router에서 name 설정안된경우
+    // context.push(UsernameScreen.routeName);
+    // go router에서 name 설정된 경우
+    // context.pushNamed("username_screen");
+    //go router에서 child router 사용하는경우우
+//context.pushNamed(UsernameScreen.routeName);
   }
 
   @override

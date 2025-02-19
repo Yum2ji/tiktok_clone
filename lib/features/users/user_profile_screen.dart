@@ -16,7 +16,7 @@ class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({
     super.key,
     required this.username,
-   // required this.tab,
+    // required this.tab,
   });
 
   @override
@@ -48,6 +48,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
                 SliverAppBar(
+                 
                   centerTitle: true,
                   title: Text(widget.username),
                   actions: [
@@ -109,8 +110,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   ),
                                   Gaps.h24,
                                   Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       SizedBox(
@@ -174,8 +174,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                 ? Breakpoints.sm * 0.07
                                                 : width * 0.03,
                                             child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
+                                              padding: const EdgeInsets.symmetric(
                                                 vertical: Sizes.size12,
                                               ),
                                               decoration: BoxDecoration(
@@ -252,8 +251,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 child: SizedBox(
                                   width: Breakpoints.sm * 0.75,
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Gaps.v14,
                                       Text(
@@ -327,8 +325,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   ),
                                   VerticalDivider(
                                     //specific hegiht을 가진 부모위젯필요
-                                    width: Sizes
-                                        .size32, // A|B 가 있을때 A와 B사이의 거리를 의미함
+                                    width:
+                                        Sizes.size32, // A|B 가 있을때 A와 B사이의 거리를 의미함
                                     thickness: Sizes.size1,
                                     color: Colors.grey.shade400,
                                     indent: Sizes.size14,
@@ -340,8 +338,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   ),
                                   VerticalDivider(
                                     //specific hegiht을 가진 부모위젯필요
-                                    width: Sizes
-                                        .size32, // A|B 가 있을때 A와 B사이의 거리를 의미함
+                                    width:
+                                        Sizes.size32, // A|B 가 있을때 A와 B사이의 거리를 의미함
                                     thickness: Sizes.size1,
                                     color: Colors.grey.shade400,
                                     indent: Sizes.size14,
@@ -470,7 +468,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ];
             },
             //CustomScrollView를 쓸때는 TabBArView도 appBar쪽에 있었는데 body로 빼냄.
-
+      
             body: TabBarView(
               //SliverToBoxAdapter 쪽에 쓰였을 때는 TabBarView는 height 이 규정되어야 한다해서 여기는 SizedBox안에들어감
               //이제 NestedScrollView 사용하니까 Sized 제한 없어서 GridView아래있는 것도 scroll 가능능
@@ -484,11 +482,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   itemCount: 100,
                   padding: EdgeInsets.zero,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount:
-                        width > Breakpoints.lg ? 5 : 3, //# of columns
+                    crossAxisCount: width > Breakpoints.lg ? 5 : 3, //# of columns
                     crossAxisSpacing: Sizes.size2,
                     mainAxisSpacing: Sizes.size2,
-
+      
                     //itembuilder쪽으세서 overflow 나면 여기 childAspectRatio를 수정해야함.
                     //9 / 16 원래 이값이였는데 height에서 overflow 나서 9/20으로 바꿈.
                     childAspectRatio: 9 / 14,

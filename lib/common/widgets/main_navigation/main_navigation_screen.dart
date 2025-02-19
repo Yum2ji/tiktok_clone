@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/discover/discover_screen.dart';
 import 'package:tiktok_clone/features/inbox/inbox_screen.dart';
-import 'package:tiktok_clone/features/main_navigation/widgets/nav_tab.dart';
-import 'package:tiktok_clone/features/main_navigation/widgets/post_video_button.dart';
+import 'package:tiktok_clone/common/widgets/main_navigation/widgets/nav_tab.dart';
+import 'package:tiktok_clone/common/widgets/main_navigation/widgets/post_video_button.dart';
 import 'package:tiktok_clone/features/users/user_profile_screen.dart';
-import 'package:tiktok_clone/features/videos/video_timeline_screen.dart';
+import 'package:tiktok_clone/features/videos/views/video_recording_screen.dart';
+import 'package:tiktok_clone/features/videos/views/video_timeline_screen.dart';
+import 'package:tiktok_clone/router.dart';
 import 'package:tiktok_clone/utils.dart';
 
 class MainNavigationScreen extends StatefulWidget {
-  const MainNavigationScreen({super.key});
+  static const String routeName = "mainNavigation";
+  final String tab;
+  const MainNavigationScreen({super.key, required this.tab});
 
   @override
   State<MainNavigationScreen> createState() => _MainNavigationScreenState();
@@ -53,21 +58,32 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   //   ),
   // ];
 
+
+  final List<String> _tabs = [
+    "home",
+    "discover",
+    "xxxx",
+    "inbox",
+    "profile",
+  ];
+
   /*
    flutter 프로젝트 자체적으로 처음시작되는 페이지가 video이면서
    video 에 음성이 포함되고 있으면 무조건 에러 남.
    chrome, edge 같은데서 소리나는 비디오파일이 첫화면으로 자동재생되는 것을 막음.
   */
-  int _selectedIndex = 0;
+ 
+  late int _selectedIndex = _tabs.indexOf(widget.tab);
 
   void _onTap(int index) {
+    context.go("/${_tabs[index]}");
     setState(() {
       _selectedIndex = index;
     });
   }
 
   void _onPostVideoButtonTap() {
-    Navigator.of(context).push(
+/*     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => Scaffold(
           appBar: AppBar(
@@ -79,7 +95,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         ),
         fullscreenDialog: true, //covering whole page
       ),
-    );
+    ); */
+
+    context.pushNamed(VideoRecordingScreen.routeName);
   }
 
   // MainNavigationBottomNaviScreen
@@ -124,7 +142,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             offstage: _selectedIndex != 4,
             child: const UserProfileScreen(
               username: "Yumi",
-             // tab: "",
+              // tab: "",
             ),
           ),
         ],

@@ -9,7 +9,8 @@ import 'package:tiktok_clone/router.dart';
 import 'package:tiktok_clone/utils.dart';
 
 class LoginScreen extends StatelessWidget {
-  static String routeName = "/login";
+  static String routeName = "login";
+  static String routeURL = "/login";
   const LoginScreen({super.key});
 
   void _onSignUpTap(BuildContext context) {
@@ -18,11 +19,20 @@ class LoginScreen extends StatelessWidget {
   }
 
   void _onEmailLoginTap(BuildContext context) {
-    Navigator.of(context).push(
+/*     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => const LoginFormScreen(),
       ),
-    );
+    ); 
+    이거랑 아래거랑 완전히 동일한한
+    */
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LoginFormScreen(),
+      ),
+    ); 
   }
 
   @override

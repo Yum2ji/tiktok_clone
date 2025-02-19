@@ -13,8 +13,6 @@ class EmailScreenArgs{
 }
 
 class EmailScreen extends StatefulWidget {
-  static String routeURL = "email"; // child 방식으로 하면 /가 필요없음음
-  static String routeName = "email";
   //go_router에서 emailscreensargs 값을 받으므로.
   // final String username ; 이게 생긴것것
   final String username ;

@@ -6,6 +6,8 @@ import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/utils.dart';
 
 class ActivityScreen extends StatefulWidget {
+  static const routeName = "activity";
+  static const routeURL = "/activity";
   const ActivityScreen({super.key});
 
   @override
@@ -108,9 +110,9 @@ addListener, animationbuilder 나 setstate 없이 property _animationcontroller,
     await이필요한것임 그런데,, forward 할 때는 바로나타나게할거라
     */
     if (_animationController.isCompleted) {
-     await _animationController.reverse();
+      await _animationController.reverse();
     } else {
-       _animationController.forward();
+      _animationController.forward();
     }
 
     setState(() {
@@ -120,14 +122,14 @@ addListener, animationbuilder 나 setstate 없이 property _animationcontroller,
 
   @override
   Widget build(BuildContext context) {
-    final isDark =isDarkMode(context);
+    final isDark = isDarkMode(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: GestureDetector(
           onTap: _toggleAnimations,
           child: Row(
-            mainAxisSize: MainAxisSize.min,//중간에 오게하려고
+            mainAxisSize: MainAxisSize.min, //중간에 오게하려고
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
@@ -202,25 +204,27 @@ addListener, animationbuilder 나 setstate 없이 property _animationcontroller,
                       width: Sizes.size52,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: isDark? Colors.grey.shade800 :  Colors.white,
+                        color: isDark ? Colors.grey.shade800 : Colors.white,
                         border: Border.all(
-                          color:isDark? Colors.grey.shade800 : Colors.grey.shade400,
+                          color: isDark
+                              ? Colors.grey.shade800
+                              : Colors.grey.shade400,
                           width: Sizes.size1,
                         ),
                       ),
                       child: const Center(
                         child: FaIcon(
                           FontAwesomeIcons.bell,
-                         // color: Colors.black,
+                          // color: Colors.black,
                         ),
                       ),
                     ),
                     title: RichText(
                       text: TextSpan(
                         text: "Account update:",
-                        style:  TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: isDark? null : Colors.black,
+                          color: isDark ? null : Colors.black,
                           fontSize: Sizes.size20,
                         ),
                         children: [
@@ -252,18 +256,19 @@ addListener, animationbuilder 나 setstate 없이 property _animationcontroller,
           /*
           AnimatedModalBarrier는 못건드리게 하는.Stack 이전값은 동작안하도록
            */
-         if(_showBarrier) AnimatedModalBarrier(
-            color: _barrierAnimation,
+          if (_showBarrier)
+            AnimatedModalBarrier(
+              color: _barrierAnimation,
 
-            //dismissible + onDismiss 로,, animatedModalBarrier를 클릭해도 
-            //_ontitleTp 누른 효과를내도록함.
-            dismissible: true,
-            onDismiss: _toggleAnimations,
-          ),
+              //dismissible + onDismiss 로,, animatedModalBarrier를 클릭해도
+              //_ontitleTp 누른 효과를내도록함.
+              dismissible: true,
+              onDismiss: _toggleAnimations,
+            ),
           SlideTransition(
             position: _panelAnimation,
             child: Container(
-              decoration:  BoxDecoration(
+              decoration: BoxDecoration(
                 color: Theme.of(context).appBarTheme.backgroundColor,
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(
@@ -284,7 +289,7 @@ addListener, animationbuilder 나 setstate 없이 property _animationcontroller,
                           //ListTile leading 이면 너무 text랑 떨어진 것 같아서 Row로 바꿔버림
                           Icon(
                             tab["icon"],
-                           // color: Colors.black,
+                            // color: Colors.black,
                             size: Sizes.size16,
                           ),
                           Gaps.h20,
