@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiktok_clone/common/video_config/video_config.dart';
@@ -12,7 +13,9 @@ import 'package:tiktok_clone/generated/l10n.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class VideoPost extends StatefulWidget {
+//ConsumerWidget 에서는 build에서 무조건 ref 입력해야했는데데
+//ConsumerStatefulWidget 를 사용하면  안해도괜찮음
+class VideoPost extends ConsumerStatefulWidget {
   final Function onVideoFinshied;
   final int index;
   const VideoPost({
@@ -22,10 +25,10 @@ class VideoPost extends StatefulWidget {
   });
 
   @override
-  State<VideoPost> createState() => _VideoPostState();
+  VideoPostState createState() => VideoPostState();
 }
 
-class _VideoPostState extends State<VideoPost>
+class VideoPostState extends ConsumerState<VideoPost>
     with SingleTickerProviderStateMixin {
   final VideoPlayerController _videoPlayerController =
       VideoPlayerController.asset("assets/videos/video_flag.mp4");
@@ -99,9 +102,10 @@ class _VideoPostState extends State<VideoPost>
       duration: _animationDuration,
     );
 
-    context
+// 아래 코드는 provider 쓸때
+/*     context
         .read<PlaybackConfigViewModel>()
-        .addListener(_onPlaybackConfigChanged);
+        .addListener(_onPlaybackConfigChanged); */
 
     //이걸 하지 않으면 _animationController.revere, forward만 했을 때 끊겨 보임.
     //우리는 lower/upper 사이에 중간값들로 setsTate 해서 build 해줘야함.
@@ -128,10 +132,15 @@ class _VideoPostState extends State<VideoPost>
   void _onPlaybackConfigChanged() {
     //dead video (_videoPlayerController)의 값을 사용하면 에러 날 수 있음
     //mounted로 구분분
-    if(!mounted) return;
-    
-    final muted = context.read<PlaybackConfigViewModel>().muted;
-    if (muted) {
+    if (!mounted) return;
+    // provider 쓰는 경우
+    // final muted = context.read<PlaybackConfigViewModel>().muted;
+/*     if (muted) {
+      _videoPlayerController.setVolume(0);
+    } else {
+      _videoPlayerController.setVolume(1);
+    } */
+    if (ref.read(playbackConfigProvider).muted) {
       _videoPlayerController.setVolume(0);
     } else {
       _videoPlayerController.setVolume(1);
@@ -159,8 +168,14 @@ class _VideoPostState extends State<VideoPost>
         !_isPaused //_isPaused 조건을 추가함 android는 괜찮은데. 강의ㅣ에서 영상 멈춘상태로-> refresh 하면 바로 restart되는 현상있어서 추가
         &&
         !_videoPlayerController.value.isPlaying) {
-      final autoplay = context.read<PlaybackConfigViewModel>().autoplay;
+      //Provider만 쓰는 경우
+      /* final autoplay = context.read<PlaybackConfigViewModel>().autoplay;
       if (autoplay) {
+        _videoPlayerController.play();
+      } */
+
+      //riverpod 쓰는경우
+      if (ref.read(playbackConfigProvider).autoplay) {
         _videoPlayerController.play();
       }
     }
@@ -274,20 +289,25 @@ class _VideoPostState extends State<VideoPost>
             top: 40,
             child: IconButton(
               onPressed: () {
-                context.read<PlaybackConfigViewModel>().setMuted(
+                _onPlaybackConfigChanged();
+                //아래 내용은 Provider
+/*                 context.read<PlaybackConfigViewModel>().setMuted(
                       //여기는 read로 읽음 어차피 onpressed 할때 실행된다는 거아니까
                       //watch로 계속 보지는 않는
                       !context.read<PlaybackConfigViewModel>().muted,
-                    );
+                    ); */
+
                 //context.read<VideoConfig>().toggleIsMuted() 이런형식은 multiprovider로 main 정의될때때
                 //context.read<VideoConfig>().toggleIsMuted();
                 // videoConfig.value = !videoConfig.value;
               },
               // videoConfig.toggleAutoMute, // 이건 changenotifier쓸때
               //VideoConfigData.of(context).toggleMuted,
-              icon: FaIcon(
+              icon:  FaIcon(
                 //watch는muted 값이 바뀌는지 아닌지를를 notify 하고 있음.
-                context.watch<PlaybackConfigViewModel>().muted
+                ref.watch(playbackConfigProvider).muted
+                    //provider 쓰는 경우
+                    //       context.watch<PlaybackConfigViewModel>().muted
                     /*                 아래 내용은 multiprovider로 정의될때임./*  */
                     context.watch<VideoConfig>().isMuted
  */ // _autoMute

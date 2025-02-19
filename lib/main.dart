@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,7 +41,8 @@ void main() async {
 
   // preferences 값 자체를 TikTokApp에서 할 수 없음. main에서만 가느함
   // 그렇기 때문에 Multiprovider로 감싸는 것도 TikTokApp 이 아닌 main 에서 사용하는.
-  runApp(
+  //provider 사용하는 경우는 아래
+/*   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -49,6 +51,15 @@ void main() async {
       ],
       child: const TikTokApp(),
     ),
+  ); */
+
+//riverpod 사용하려면 이거거
+  runApp(
+    ProviderScope(overrides: [
+      playbackConfigProvider.overrideWith(
+        () => PlaybackConfigViewModel(repository),
+      ),
+    ], child: const TikTokApp()),
   );
 }
 
