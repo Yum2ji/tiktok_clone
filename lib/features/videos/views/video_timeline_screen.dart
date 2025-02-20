@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tiktok_clone/features/videos/view_models/timeline_view_model.dart';
 import 'package:tiktok_clone/features/videos/views/widgets/video_post.dart';
 
-class VideoTimelineScreen extends StatefulWidget {
+class VideoTimelineScreen extends ConsumerStatefulWidget {
   const VideoTimelineScreen({super.key});
 
   @override
-  State<VideoTimelineScreen> createState() => _VideoTimelineScreenState();
+  VideoTimelineScreenState createState() => VideoTimelineScreenState();
 }
 
 //Main_navigation_screen.daart 의 scaffold 의 child 이므로
 //여기서는 scaffold 필요없음.
-class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
+class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
   //infinite 스크롤 처럼 PageView.builder의 onPage Changed사용할때 필요
   int _itemCount = 4;
 
@@ -60,37 +62,43 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //Chapter 7.1
-    //ListView.builder 나 PageView.builder 나
-    // 둘다 builder 메소드가 있음.
-    // builder 는 children 모두 동시에 rendering 하지 않는것.
-    // itembuilder
-
-    //Chapter7.1
-    //PageView.builder 에서 controller 가 사용자의 사용을 조절해야함.
-    //갑자기 첫번째 화면으로 가고 싶을수도 있고 하니까
-    // PageView.builder에서 페이지 올리다보면 애니메이션이 입혀진.. 이것도 contorller 가능능
-
-    //RefreshIndicator는 사용자가 refresh할때의 동작
-    return RefreshIndicator(
-      displacement: 50,
-      edgeOffset: 30 ,
-      //backgroundColor: Colors.red,
-      color: Theme.of(context).primaryColor,
-      strokeWidth: 3,
-      onRefresh: _onRefresh,
-      child: PageView.builder(
-        onPageChanged: _onPageChanged,
-        controller: _pageController,
-        //pageSnapping : false : user가 화면 반이상 드래그 햇는데도 다른 화면으로 안바뀌고 그대로
-        scrollDirection: Axis.vertical,
-        //itemCount 설정안하면 사용자가 드래그 하다가 없는 값에 접근하면서 exception 발생
-        itemCount: _itemCount,
-        itemBuilder: (context, index) => VideoPost(
-          onVideoFinshied: _onVideoFinished,
-          index: index,
-        ),
-      ),
-    );
+    /*     
+    provider에서 async 해서 API 데이터 가져오고 있기 떄문에
+    when 을 사용
+     */
+    return ref.watch(timelineProvider).when(
+          loading: () => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          error: (error, stackTrace) => Center(
+            child: Text(
+              "Colud not load videos : $error",
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
+          //videos 는 provider로 부터 오는 videos.length는 default로 0일
+          data: (videos) => RefreshIndicator(
+            displacement: 50,
+            edgeOffset: 30,
+            //backgroundColor: Colors.red,
+            color: Theme.of(context).primaryColor,
+            strokeWidth: 3,
+            onRefresh: _onRefresh,
+            child: PageView.builder(
+              onPageChanged: _onPageChanged,
+              controller: _pageController,
+              //pageSnapping : false : user가 화면 반이상 드래그 햇는데도 다른 화면으로 안바뀌고 그대로
+              scrollDirection: Axis.vertical,
+              //itemCount 설정안하면 사용자가 드래그 하다가 없는 값에 접근하면서 exception 발생
+              itemCount: videos.length,
+              itemBuilder: (context, index) => VideoPost(
+                onVideoFinshied: _onVideoFinished,
+                index: index,
+              ),
+            ),
+          ),
+        );
   }
 }
