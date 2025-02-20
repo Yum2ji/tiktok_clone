@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1013754567458",
+    "project_id": "nomad-ym-tiktok",
+    "storage_bucket": "nomad-ym-tiktok.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1013754567458:android:5b18c507f78d5b648a637b",
+        "android_client_info": {
+          "package_name": "com.example.tiktok_clone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9mKslOB0WKQIxsgPPICH__S_ZZ0b7LTA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

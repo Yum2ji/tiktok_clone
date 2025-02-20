@@ -4,7 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gallery_saver/gallery_saver.dart';
+//import 'package:gallery_saver/gallery_saver.dart';
 import 'package:tiktok_clone/features/videos/view_models/timeline_view_model.dart';
 import 'package:video_player/video_player.dart';
 
@@ -47,7 +47,7 @@ class VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
 
   Future<void> _saveToGallery() async {
     if (_saveVideo) return;
-    await GallerySaver.saveVideo(widget.video.path, albumName: "TikTok clone!");
+  /*   await GallerySaver.saveVideo(widget.video.path, albumName: "TikTok clone!"); */
 
     _saveVideo = true;
     setState(() {});

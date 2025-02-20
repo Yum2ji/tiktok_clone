@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -9,6 +10,7 @@ import 'package:tiktok_clone/common/video_config/video_config.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/videos/repos/video_playback_config_repo.dart';
 import 'package:tiktok_clone/features/videos/view_models/playback_config_vm.dart';
+import 'package:tiktok_clone/firebase_options.dart';
 import 'package:tiktok_clone/generated/l10n.dart';
 import 'package:tiktok_clone/router.dart';
 
@@ -16,11 +18,15 @@ import 'package:tiktok_clone/router.dart';
 
 // 본래 async 없어도 되나, futter 특성사용하면서 쓰게됨.
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   /*
   아래내용처럼 하면, 화면을 옆으로 기울여도 항상 portrait 모드로 움직임.
   */
-
-  WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp],
   );
@@ -232,3 +238,26 @@ class TikTokApp extends StatelessWidget {
     );
   }
 }
+
+/*
+terminal에 검색한 것-> 말고 cmd에서 할것
+1. flutter와 firebase 연결할때.
+Firebase cli window 설치 및 로그인 후.
+flutter terminal에서 입력력 
+=>> dart pub global activate flutterfire_cli 
+
+2. firebase와 통신하기 위한 config
+==> flutterfire configure
+
+3.
+=>flutter pub add firebase_core
+
+4. flutterfire configure
+
+5. flutter pub add firebase_auth
+flutter pub add cloud_firestore
+flutter pub add firebase_storage
+
+6. flutterfire configure
+
+*/
