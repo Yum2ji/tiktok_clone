@@ -69,12 +69,12 @@ void main() async {
   );
 }
 
-class TikTokApp extends StatelessWidget {
+class TikTokApp extends ConsumerWidget {
   const TikTokApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
     //아래처럼하면 휴대폰에서 설정안바꿔도됨.
     //S.load(const Locale("en"));
 
@@ -93,7 +93,7 @@ class TikTokApp extends StatelessWidget {
       ], */
 
     return MaterialApp.router(
-      routerConfig: router,
+      routerConfig: ref.watch(routerProvider),
       debugShowCheckedModeBanner: false, // debug 할 때 우측상단에 뜨는거 삭제제
       title: 'TikTok Clone',
 
@@ -261,3 +261,13 @@ flutter pub add firebase_storage
 6. flutterfire configure
 
 */
+
+/*
+
+1. git 연동 후  C:\Users\wda93\nomad\tiktok_clone\android> 경로 터미널에서 아래 내용 검색
+app<->firebase 사이에 signature를 받는거
+
+./gradlew signinReport
+
+
+ */

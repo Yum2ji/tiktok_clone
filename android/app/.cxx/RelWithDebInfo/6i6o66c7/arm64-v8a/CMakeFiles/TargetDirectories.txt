@@ -1,0 +1,2 @@
+C:/Users/wda93/nomad/tiktok_clone/android/app/.cxx/RelWithDebInfo/6i6o66c7/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/wda93/nomad/tiktok_clone/android/app/.cxx/RelWithDebInfo/6i6o66c7/arm64-v8a/CMakeFiles/rebuild_cache.dir

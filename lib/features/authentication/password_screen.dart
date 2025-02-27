@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/authentication/birthdat_screen.dart';
+import 'package:tiktok_clone/features/authentication/view_models/signup_view_model.dart';
 import 'package:tiktok_clone/features/authentication/widgets/form_botton.dart';
 
-class PasswordScreen extends StatefulWidget {
+class PasswordScreen extends ConsumerStatefulWidget {
   const PasswordScreen({super.key});
 
   @override
-  State<PasswordScreen> createState() => _PasswordScreenState();
+  ConsumerState<PasswordScreen> createState() => _PasswordScreenState();
 }
 
-class _PasswordScreenState extends State<PasswordScreen> {
+class _PasswordScreenState extends ConsumerState<PasswordScreen> {
   final TextEditingController _passwordConroller = TextEditingController();
   String _password = "";
 
@@ -47,6 +49,11 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
   void _onSubmit() {
     if (!_isPasswordValid()) return;
+    final state = ref.read(signUpForm.notifier).state;
+    ref.read(signUpForm.notifier).state = {
+      ...state,
+      "password": _password,
+    };
 
     Navigator.push(
       context,
@@ -148,14 +155,17 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 ),
               ),
               Gaps.v10,
-               Row(
+              Row(
                 children: [
-                  FaIcon(FontAwesomeIcons.circleCheck,
-                  size: Sizes.size20,
-                  color : _isPasswordValid() ? Colors.green : Colors.grey.shade400,
+                  FaIcon(
+                    FontAwesomeIcons.circleCheck,
+                    size: Sizes.size20,
+                    color: _isPasswordValid()
+                        ? Colors.green
+                        : Colors.grey.shade400,
                   ),
-                   Gaps.h5,
-                   const Text('8 to 20 characters'),
+                  Gaps.h5,
+                  const Text('8 to 20 characters'),
                 ],
               ),
               Gaps.v16,

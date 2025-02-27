@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,6 +7,7 @@ import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/authentication/login_screen.dart';
 import 'package:tiktok_clone/features/authentication/username_screen.dart';
+import 'package:tiktok_clone/features/authentication/view_models/social_auth_view_model.dart';
 import 'package:tiktok_clone/features/authentication/widgets/auth_button.dart';
 import 'package:tiktok_clone/generated/l10n.dart';
 import 'package:tiktok_clone/router.dart';
@@ -14,7 +16,7 @@ import 'package:tiktok_clone/utils.dart';
 //자동으로  복사가 안된다는 단점.
 //import 'package:flutter_gen/gen_l10n/intl_generated.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends ConsumerWidget {
   static String routeURL = "/";
   static const routeName = "signUp";
   const SignUpScreen({super.key});
@@ -100,7 +102,7 @@ class SignUpScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     //OrientationBuilder 휴대폰 화면관련 기능능
     return OrientationBuilder(
       builder: (context, orientation) {
@@ -193,11 +195,15 @@ class SignUpScreen extends StatelessWidget {
                       ),
                     ),
                     Gaps.v16,
-                    AuthButton(
-                      icon: const FaIcon(
-                        FontAwesomeIcons.apple,
+                    GestureDetector(
+                      onTap: () =>
+                          ref.read(socialAuthProvider.notifier).githubSignIn(context),
+                      child: const AuthButton(
+                        icon: FaIcon(
+                          FontAwesomeIcons.github,
+                        ),
+                        text: "Continue with Github",
                       ),
-                      text: S.of(context).appleButton,
                     ),
                   ],
                   if (orientation == Orientation.landscape) ...[
@@ -219,11 +225,16 @@ class SignUpScreen extends StatelessWidget {
                         // Row의 자식노드에 FractionallySizedBox가 있다면, 부모크기 아 있어야함.
                         // Expanded는 부모 크기에 알아서 맞춰줌.
                         Expanded(
-                          child: AuthButton(
-                            icon: const FaIcon(
-                              FontAwesomeIcons.apple,
+                          child: GestureDetector(
+                            onTap: () => ref
+                                .read(socialAuthProvider.notifier)
+                                .githubSignIn(context),
+                            child: const AuthButton(
+                              icon: FaIcon(
+                                FontAwesomeIcons.github,
+                              ),
+                              text: "Continue with Github",
                             ),
-                            text: S.of(context).appleButton,
                           ),
                         ),
                       ],

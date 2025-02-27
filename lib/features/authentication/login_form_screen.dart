@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/authentication/view_models/login_view_model.dart';
 import 'package:tiktok_clone/features/authentication/widgets/form_botton.dart';
 import 'package:tiktok_clone/features/onboarding/interests_screen.dart';
 
-class LoginFormScreen extends StatefulWidget {
+class LoginFormScreen extends ConsumerStatefulWidget {
   const LoginFormScreen({super.key});
 
   @override
-  State<LoginFormScreen> createState() => _LoginFormScreenState();
+  ConsumerState<LoginFormScreen> createState() => _LoginFormScreenState();
 }
 
-class _LoginFormScreenState extends State<LoginFormScreen> {
+class _LoginFormScreenState extends ConsumerState<LoginFormScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Map<String, String> formData = {};
 
@@ -32,19 +34,12 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
     if (_formKey.currentState != null) {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-
-// Navogator.of(context).push를 쓰면 로그인하고 다음 페이지 넘어가도 다시 뒤로로 가는 문제존재.
-// 따라서, pushAndRemoveUntil을 사용.
-/*         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const InterestsScreen()),
-            (route) {
-              //predicate, 여기는 previous route 쓸지 안쓸지를 정하는 부분임.
-              //return false 하면 항상, 모든 내용을 안쓰게 됨.
-          return false;
-        }); */
-
-        context.goNamed(InterestsScreen.routeName);
-
+        ref.read(loginProvider.notifier).login(
+              formData["email"]!,
+              formData["password"]!,
+              context,
+            );
+        //context.goNamed(InterestsScreen.routeName);
       }
     }
   }
@@ -71,7 +66,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
                 },
                 onSaved: (newValue) {
                   if (newValue != null) {
-                    formData['password'] = newValue;
+                    formData['email'] = newValue;
                   }
                 },
               ),
@@ -90,8 +85,11 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
               ),
               Gaps.v28,
               GestureDetector(
-                  onTap: _onSubmitTap,
-                  child: const FormButton(disabled: false)),
+                onTap: _onSubmitTap,
+                child: FormButton(
+                  disabled: ref.watch(loginProvider).isLoading,
+                ),
+              ),
             ],
           ),
         ),

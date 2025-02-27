@@ -1,20 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/authentication/view_models/signup_view_model.dart';
 import 'package:tiktok_clone/features/authentication/widgets/form_botton.dart';
 import 'package:tiktok_clone/features/onboarding/interests_screen.dart';
 
-
-class BirthdayScreen extends StatefulWidget {
+class BirthdayScreen extends ConsumerStatefulWidget {
   const BirthdayScreen({super.key});
 
   @override
-  State<BirthdayScreen> createState() => _BirthdayScreenState();
+  ConsumerState<BirthdayScreen> createState() => _BirthdayScreenState();
 }
 
-class _BirthdayScreenState extends State<BirthdayScreen> {
+class _BirthdayScreenState extends ConsumerState<BirthdayScreen> {
   final TextEditingController _birthdayController = TextEditingController();
   DateTime initialDate = DateTime.now();
 
@@ -32,23 +33,9 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   }
 
   void _onNextTap() {
-    //여기서는 context로 input 받지않음. stateful 위젯으로 하면 context 받음
-    //context input으로정의해도 되긴함.
-
-// Navogator.of(context).push를 쓰면 로그인하고 다음 페이지 넘어가도 다시 뒤로로 가는 문제존재.
-// 따라서, pushAndRemoveUntil을 사용.
-/*         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const InterestsScreen()),
-            (route) {
-              //predicate, 여기는 previous route 쓸지 안쓸지를 정하는 부분임.
-              //return false 하면 항상, 모든 내용을 안쓰게 됨.
-          return false;
-        }); */
-  
-    // pushReplacementNamed 이거 사용하면 기존에 stack에 있던 내용은 다 삭제되는
-    //context.pushReplacementNamed(InterestsScreen.routeName);
-    //pushReplacementNamed 랑 거의동일
-    context.goNamed(InterestsScreen.routeName);
+    ref.read(signupProvider.notifier).signUp(context);
+    //signUp viewmodel에서 해주기 때문에 아래 내용 생략 가능.
+    // context.goNamed(InterestsScreen.routeName);
   }
 
   void _setTextFieldDate(DateTime date) {
@@ -109,18 +96,22 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
             Gaps.v16,
             //TextButton 같은거로 써도되긴하는데 anaimated하기 더편한
             GestureDetector(
-                onTap: _onNextTap, child: const FormButton(disabled: false)),
+              onTap: _onNextTap,
+              child:  FormButton(
+                disabled: ref.watch(signupProvider).isLoading,
+              ),
+            ),
           ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        height : 200,
+        height: 200,
         child: SizedBox(
           height: 300,
           child: CupertinoDatePicker(
             maximumDate: initialDate,
             initialDateTime: initialDate,
-            mode : CupertinoDatePickerMode.date,
+            mode: CupertinoDatePickerMode.date,
             onDateTimeChanged: _setTextFieldDate,
           ),
         ),
