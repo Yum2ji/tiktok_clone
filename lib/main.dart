@@ -53,12 +53,12 @@ void main() async {
       providers: [
         ChangeNotifierProvider(
           create: (context) => PlaybackConfigViewModel(repository),
-        )
+        ),
       ],
       child: const TikTokApp(),
     ),
-  ); */
-
+  );
+ */
 //riverpod 사용하려면 이거거
   runApp(
     ProviderScope(overrides: [
@@ -74,7 +74,7 @@ class TikTokApp extends ConsumerWidget {
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     //아래처럼하면 휴대폰에서 설정안바꿔도됨.
     //S.load(const Locale("en"));
 

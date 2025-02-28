@@ -1,0 +1,71 @@
+class UserProfileModel {
+  final String uid;
+
+  // users.dart 에 있는 내용 확인함.
+  final String email;
+  final String name;
+
+  final String bio;
+  final String link;
+  final String birthday;
+  final bool hasAvatar;
+
+  UserProfileModel({
+    required this.uid,
+    required this.email,
+    required this.name,
+    required this.bio,
+    required this.link,
+    required this.birthday,
+    required this.hasAvatar,
+  });
+
+  UserProfileModel.empty()
+      : uid = "",
+        email = "",
+        name = "",
+        bio = "",
+        link = "",
+        birthday  =DateTime.now().toString(),
+        hasAvatar = false;
+
+  UserProfileModel.fromJson(Map<String, dynamic> json)
+      : uid = json["uid"],
+        email = json["email"],
+        name = json["name"],
+        bio = json["bio"],
+        birthday = json["birthday"],
+        link = json["link"],
+        hasAvatar = json["hasAvatar"];
+
+  Map<String, dynamic> toJson() {
+    return {
+      "uid": uid,
+      "email": email,
+      "name": name,
+      "bio": bio,
+      "birthday" : birthday,
+      "link": link,
+    };
+  }
+
+  UserProfileModel copyWith({
+    String? uid,
+    String? email,
+    String? name,
+    String? bio,
+    String? link,
+    String? birthday,
+    bool? hasAvatar,
+  }) {
+    return UserProfileModel(
+      uid: uid ?? this.uid,
+      email: email ?? this.email,
+      name: name ?? this.name,
+      bio: bio ?? this.bio,
+      link: link ?? this.link,
+      birthday: birthday?? this.birthday,
+      hasAvatar: hasAvatar ?? this.hasAvatar,
+    );
+  }
+}

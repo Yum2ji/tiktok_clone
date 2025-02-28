@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tiktok_clone/features/authentication/repos/authentication_repo.dart';
 import 'package:tiktok_clone/features/onboarding/interests_screen.dart';
+import 'package:tiktok_clone/features/users/view_models/users_view_model.dart';
 import 'package:tiktok_clone/utils.dart';
 
 /*
@@ -24,19 +25,26 @@ class SignupViewModel extends AsyncNotifier<void> {
   Future<void> signUp(BuildContext context) async {
     state = const AsyncValue.loading();
     final form = ref.read(signUpForm);
-
+    final users = ref.read(usersProvider.notifier);
     //아래 2줄 또는 AsyncValue.gaurd로 입력 에러생기면 에러값을 입력 아니면 future에 값을 입력해줌.
     //await _autoRepo.signUp(form["email"], form["password"]);
     //state = AsyncValue.data(null);
-    state = await AsyncValue.guard(
-      () async => await _autoRepo.emailSignUp(
+    state = await AsyncValue.guard(() async {
+      final userCredential = await _autoRepo.emailSignUp(
         form["email"],
         form["password"],
-      ),
-    );
-    if(state.hasError){
-         showFirebaseErrorSnack(context, state.error); 
-    }else{
+      );
+      print(form["name"]);
+      print(form["birthday"]);
+      await users.createProfile(
+        userCredential,
+        form['name'],
+        form['birthday'],
+      );
+    });
+    if (state.hasError) {
+      showFirebaseErrorSnack(context, state.error);
+    } else {
       context.goNamed(InterestsScreen.routeName);
     }
   }

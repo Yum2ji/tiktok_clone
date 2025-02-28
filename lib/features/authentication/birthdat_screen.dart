@@ -33,6 +33,10 @@ class _BirthdayScreenState extends ConsumerState<BirthdayScreen> {
   }
 
   void _onNextTap() {
+    
+    final state = ref.read(signUpForm.notifier).state;
+    ref.read(signUpForm.notifier).state = {...state, "birthday" : _birthdayController.value.text.toString()};
+
     ref.read(signupProvider.notifier).signUp(context);
     //signUp viewmodel에서 해주기 때문에 아래 내용 생략 가능.
     // context.goNamed(InterestsScreen.routeName);
